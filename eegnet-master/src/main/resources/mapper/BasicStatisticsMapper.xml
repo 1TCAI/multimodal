@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pandabus.web.dao.BasicStatisticsDao">
+
+    <select id="getUserCount" resultType="BasicStatistics">
+        SELECT
+            DATE_FORMAT(t.createDate, '%Y-%m-%d') AS createDate,
+            SUM(temp.countnumber) as userCount
+        FROM (
+            SELECT COUNT(1) as countnumber,
+            DATE_FORMAT(d.create_date, '%Y-%m-%d') AS createDate
+            FROM d_user d
+            <where>
+                <if test="endDate != null and endDate !='' ">
+                    AND d.create_date <![CDATA[<=]]> #{endDate}
+                </if>
+                <if test="companyId != null and companyId >0 ">
+                    AND d.company_id = #{companyId}
+                </if>
+            </where>
+            GROUP BY DATE_FORMAT(d.create_date, '%Y-%m-%d')
+            ) t,
+            (SELECT
+            COUNT(1) as countnumber,
+            DATE_FORMAT(d.create_date, '%Y-%m-%d') AS createDate
+            FROM d_user d
+            <where>
+                <if test="endDate != null and endDate !='' ">
+                    AND d.create_date <![CDATA[<=]]> #{endDate}
+                </if>
+                <if test="companyId != null and companyId >0 ">
+                    AND d.company_id = #{companyId}
+                </if>
+            </where>
+            GROUP BY DATE_FORMAT(d.create_date, '%Y-%m-%d')
+            ) temp
+        WHERE
+        t.createDate >= temp.createDate
+        GROUP BY t.createDate
+        ORDER BY t.createDate
+    </select>
+
+    <select id="getCourseCount" resultType="BasicStatistics">
+        SELECT
+            DATE_FORMAT(t.createDate, '%Y-%m-%d') AS createDate,
+            SUM(temp.countnumber) as courseCount
+        FROM (
+            SELECT COUNT(1) as countnumber,
+            DATE_FORMAT(d.create_date, '%Y-%m-%d') AS createDate
+            FROM c_course d
+            <where>
+                <if test="companyId != null and companyId >0 ">
+                    AND d.company_id = #{companyId}
+                </if>
+                <if test="endDate != null and endDate !='' ">
+                    AND d.create_date <![CDATA[<=]]> #{endDate}
+                </if>
+            </where>
+            GROUP BY DATE_FORMAT(d.create_date, '%Y-%m-%d')
+            ) t,
+            (SELECT COUNT(1) as countnumber,
+            DATE_FORMAT(d.create_date, '%Y-%m-%d') AS createDate
+            FROM c_course d
+            <where>
+                <if test="companyId != null and companyId >0 ">
+                    AND d.company_id = #{companyId}
+                </if>
+                <if test="endDate != null and endDate !='' ">
+                    AND d.create_date <![CDATA[<=]]> #{endDate}
+                </if>
+            </where>
+            GROUP BY DATE_FORMAT(d.create_date, '%Y-%m-%d')
+            ) temp
+        WHERE
+        t.createDate >= temp.createDate
+        GROUP BY t.createDate
+        ORDER BY t.createDate
+    </select>
+
+    <select id="getVideoCount" resultType="BasicStatistics">
+        SELECT
+            DATE_FORMAT(cvs.create_date, '%Y-%m-%d') AS createDate,
+            SUM(cvs.read_amount) AS videoCount
+        FROM c_video_statistics cvs
+        JOIN c_video cv ON cv.id = cvs.video_id
+        <where>
+            <if test="startDate != null and startDate !='' ">
+                AND cvs.create_date <![CDATA[>=]]> #{startDate}
+            </if>
+            <if test="companyId != null and companyId >0 ">
+                AND cv.company_id = #{companyId}
+            </if>
+            <if test="endDate != null and endDate !='' ">
+                AND cvs.create_date <![CDATA[<=]]> #{endDate}
+            </if>
+        </where>
+        GROUP BY cvs.create_date
+        ORDER BY cvs.create_date
+    </select>
+
+    <select id="getCompanyUserCount" resultType="BasicStatistics">
+        SELECT COUNT(1) as userCount,
+          cc.id as companyId,
+          cc.company_name as companyName
+        FROM c_company cc
+        JOIN d_user d ON d.company_id = cc.id
+        GROUP BY cc.id,cc.company_name
+    </select>
+
+    <select id="getStudyAndPassPercent" resultType="BasicStatistics">
+    	SELECT
+    	    CASE WHEN d.passNumber IS NULL then 0 ELSE d.passNumber END AS passNumber,
+			CASE WHEN e.studyNumber IS NULL THEN 0 ELSE e.studyNumber END AS studyNumber,
+			CASE WHEN f.unPassandpassCount IS NULL THEN 0 ELSE f.unPassandpassCount END AS unPassandpassCount,
+			CASE WHEN m.couserAndUserNumber IS NULL THEN 0 ELSE m.couserAndUserNumber END AS couserAndUserNumber,
+			cc.company_name AS companyName,
+			cc.id as companyId
+        FROM c_company cc
+        LEFT JOIN (
+            SELECT
+                COUNT(b.userId) AS passNumber,
+                b.userNowCompanyId
+            FROM (
+                SELECT DISTINCT
+                    d.user_id AS userId,
+                    d.course_id AS courseId,
+                    cou.company_id AS companyId,
+                    du.name,
+                    du.company_id AS userNowCompanyId
+                FROM d_user_course d
+                JOIN c_course cou ON cou.id = d.course_id
+                JOIN c_company cc ON cc.id = cou.company_id AND cc.status =1
+                JOIN d_user du ON du.id = d.user_id
+                WHERE
+                du.status = 1
+                AND d.status = 4
+                AND CASE WHEN cou.company_id = 0 THEN 1=1 ELSE cou.company_id = du.company_id END
+                ) b GROUP BY b.userNowCompanyId
+            ) d ON cc.id = d.userNowCompanyId
+        LEFT JOIN (
+            SELECT
+                COUNT(b.userId) AS studyNumber,
+                b.userNowCompanyId
+            FROM (
+                SELECT DISTINCT
+                    d.user_id AS userId,
+                    d.course_id AS courseId,
+                    cou.company_id AS companyId,
+                    du.name,
+                    du.company_id AS userNowCompanyId
+                    FROM d_user_course d
+                    JOIN c_course cou ON cou.id = d.course_id
+                    JOIN c_company cc ON cc.id = cou.company_id AND cc.status =1
+                    JOIN d_user du ON du.id = d.user_id
+                    WHERE
+                    du.status = 1
+                    AND ( d.status = 1 OR d.status = 2 OR d.status = 3 OR d.status = 4  )
+                    AND CASE WHEN cou.company_id = 0 THEN 1=1 ELSE cou.company_id = du.company_id END
+                ) b GROUP BY b.userNowCompanyId
+            ) e on cc.id = e.userNowCompanyId
+        LEFT JOIN (
+            SELECT
+                COUNT(b.userId) AS unPassandpassCount,
+                b.userNowCompanyId
+            FROM (
+                SELECT DISTINCT
+                    d.user_id AS userId,
+                    d.course_id AS courseId,
+                    cou.company_id AS companyId,
+                    du.name,
+                    du.company_id AS userNowCompanyId
+                FROM d_user_course d
+                JOIN c_course cou ON cou.id = d.course_id
+                JOIN c_company cc ON cc.id = cou.company_id AND cc.status =1
+                JOIN d_user du ON du.id = d.user_id
+                WHERE
+                du.status = 1
+                AND ( d.status = 3  or d.status = 4  )
+                AND CASE WHEN cou.company_id = 0 THEN 1=1 ELSE cou.company_id = du.company_id END
+                ) b GROUP BY b.userNowCompanyId
+            ) f on cc.id = f.userNowCompanyId
+        LEFT JOIN (
+            SELECT
+                d.companyId,
+                d.coursenumber*n.usernumber AS couserAndUserNumber
+            FROM(
+                SELECT
+                    (COUNT(cou.id) + (SELECT COUNT(0) FROM c_course WHERE company_id = 0) ) as coursenumber,
+                    cc.id AS companyId
+                FROM c_company cc
+                LEFT JOIN c_course cou on cou.company_id = cc.id
+                WHERE cc.id != 0
+                GROUP BY cc.id ) d
+            JOIN (
+                SELECT
+                    COUNT(d.id) AS usernumber,
+                    cc.id AS companyId
+                FROM c_company cc
+                LEFT JOIN d_user d ON d.company_id = cc.id
+                WHERE cc.id != 0
+                GROUP BY cc.id
+                ) n ON n.companyId = d.companyId
+            ) m ON cc.id = m.companyId
+        WHERE cc.id !=0
+    </select>
+
+</mapper>

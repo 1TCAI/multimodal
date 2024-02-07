@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>dashboard</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+
+<script src="../js/dashboard/index.js"></script>
+
+<style>
+    #container {
+        background: #21202e;
+    }
+    .blockArea {
+        float:left;
+    }
+    .areaLeft {
+        width: 100%;
+        height:81%;
+    }
+    .pageTitle {
+        width: 100%;
+        height: 14%;
+        padding-left: 12px;
+        padding-top: 12px;
+        background: #272435;
+    }
+    .pageTitleText {
+        color: #fff;
+        font-size: 20px;
+        font-weight:bold;
+    }
+    .pageTimeText {
+        color: #0aecfa;
+        margin-top: 1%;
+    }
+    .numContent {
+        width: 100%;
+        height: 12%;
+        margin-top: 1%;
+        background: #21202e;
+    }
+    .numDetailed {
+        width:24%;
+        height: 100%;
+        margin-left: 1%;
+        background: #272435;
+    }
+    .blockTitle {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+        padding-bottom: 16px;
+        padding-top: 16px;
+    }
+    .numTitle {
+        width: 100%;
+        height: 40%;
+        padding-left: 12px;
+    }
+    .bottomChartContent {
+        width: 49%;
+        padding-left: 12px;
+        height: 20%;
+        background: #272435;
+        height: 100%;
+    }
+    .ulContent {
+        width: 100%;
+        height: 200px;
+        float: left;
+    }
+    .ulContent ul {
+        list-style: none;
+        /*padding: 0 10px 0 10px;*/
+        height: 100%;
+        width: 100%;
+        padding: 0;
+    }
+    .ulContent ul li {
+        height: 10%;
+        overflow:hidden;
+        border-bottom: 1px solid #263346;
+        transform: scale(0.90);
+        -ms-transform: scale(0.90);
+        -webkit-transform: scale(0.90);
+        -moz-transform: scale(0.90);
+        -o-transform: scale(0.90);
+        position: relative;
+        width: 100%;
+    }
+    .numValue {
+        color: #fff;
+        font-size: 12px;
+        font-weight: 400;
+        width: 100%;
+        padding-left: 12px;
+    }
+    .installNum {
+        color: #cca645;
+        font-size: 26px;
+        font-weight: 400;
+        width: 100%;
+        padding-left: 12px;
+    }
+    .detailedInfo {
+        white-space: nowrap;
+        float:left;
+        color: #fff;
+        font-size: 13px;
+        height: 24px;
+        line-height: 24px;
+        /*margin-top: calc(9% - 12px);*/
+        transition: transform 2s ease 0s;
+        position: absolute;
+    }
+    .imgSource img {
+        width:100%;
+        height: auto;
+    }
+    @keyframes flashing {
+        0% {box-shadow: 0px 0px 0px 0px rgba(235,5,69,0.1);}
+        50% {box-shadow: 0px 0px 0px 5px rgba(235,5,69,0.1);}
+        100% {box-shadow: 0px 0px 0px 0px rgba(235,5,69,0.1);}
+    }
+    @keyframes flashimg {
+        0% {box-shadow: 0px 0px 0px 0px rgba(235,5,69,0.1);}
+        50% {box-shadow: 0px 0px 0px 16px rgba(235,5,69,0.1);}
+        100% {box-shadow: 0px 0px 0px 0px rgba(235,5,69,0.1);}
+    }
+    .flashing {
+        animation: flashing 2s;
+        -moz-animation: flashing 2s;    /* Firefox */
+        -webkit-animation: flashing 2s; /* Safari 和 Chrome */
+        -o-animation: flashing 2s;  /* Opera */
+        animation-iteration-count:infinite;
+        -webkit-animation-iteration-count:infinite;
+        -o-animation-iteration-count:infinite;
+        -moz-animation-iteration-count:infinite;
+    }
+    .flashimg {
+        display:block;
+        animation: flashimg 2s;
+        -moz-animation: flashimg 2s;    /* Firefox */
+        -webkit-animation: flashimg 2s; /* Safari 和 Chrome */
+        -o-animation: flashimg 2s;  /* Opera */
+        animation-iteration-count:infinite;
+        -webkit-animation-iteration-count:infinite;
+        -o-animation-iteration-count:infinite;
+        -moz-animation-iteration-count:infinite;
+    }
+
+
+    @media (min-width: 1600px) {
+        .pageTitleText {
+            font-size: 26px;
+        }
+        .pageTimeText {
+            font-size: 14px;
+        }
+        .blockTitle {
+            font-size: 18px;
+        }
+        .numValue {
+            font-size: 36px;
+        }
+        .unitText {
+            font-size: 18px;
+        }
+        .detailedInfo {
+            font-size: 14px;
+        }
+    }
+
+    @media (min-width: 1920px) {
+        .pageTitleText {
+            font-size: 32px;
+        }
+        .pageTimeText {
+            font-size: 18px;
+        }
+        .blockTitle {
+            font-size: 20px;
+        }
+        .numValue {
+            font-size: 40px;
+        }
+        .unitText {
+            font-size: 20px;
+        }
+        .detailedInfo {
+            font-size: 18px;
+        }
+    }
+
+</style>
+<div id="container" style="min-height: 750px;">
+    <div class="blockArea areaLeft">
+        <div class="blockArea pageTitle">
+            <div class="pageTitleText">EEG CLOUD 数据统计</div>
+            <div class="pageTimeText" id="pageTimeText"></div>
+        </div>
+        <div class="blockArea numContent">
+            <div class="blockArea bottomChartContent">
+                <div class="blockArea blockTitle numTitle">被试资料总数统计</div>
+                <div id="chart1" style="min-height: 220px;"></div>
+            </div>
+            <div class="blockArea numDetailed">
+                <div class="blockArea blockTitle numTitle">被试资料男女比例</div>
+                <div id="chart2" style="min-height: 220px;"></div>
+            </div>
+            <div class="blockArea numDetailed">
+                <div class="blockArea blockTitle numTitle">最新病人</div>
+                <div class="ulContent" id="infoContent">
+                    <ul>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="blockArea numContent">
+            <div class="blockArea numDetailed" style="margin-left: 0;">
+                <div class="blockArea blockTitle numTitle">EEG数据统计</div>
+                <div class="blockArea numValue"><span class="unitText">记录数</span></div>
+                <div class="installNum" id="installNum1">111<span class="numValue" style="padding-left: 1px;">条</span></div>
+                <div id="chart3" style="min-height: 220px;"></div>
+            </div>
+            <div class="blockArea numDetailed">
+                <div class="blockArea blockTitle numTitle">rTMS数据统计</div>
+                <div class="blockArea numValue"><span class="unitText">记录数</span></div>
+                <div class="installNum" id="installNum2">111<span class="numValue" style="padding-left: 1px;">条</span></div>
+                <div id="chart4" style="min-height: 220px;"></div>
+            </div>
+            <div class="blockArea numDetailed">
+                <div class="blockArea blockTitle numTitle">TMS-EEG统计</div>
+                <div class="blockArea numValue"><span class="unitText">记录数</span></div>
+                <div class="installNum" id="installNum3">111<span class="numValue" style="padding-left: 1px;">条</span></div>
+                <div id="chart5" style="min-height: 220px;"></div>
+            </div>
+            <div class="blockArea numDetailed">
+                <div class="blockArea blockTitle numTitle">量表数据统计</div>
+                <div class="blockArea numValue"><span class="unitText">记录数</span></div>
+                <div class="installNum" id="installNum4">111<span class="numValue" style="padding-left: 1px;">条</span></div>
+                <div id="chart6" style="min-height: 220px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

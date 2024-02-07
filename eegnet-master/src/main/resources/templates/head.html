@@ -1,0 +1,80 @@
+<heads th:fragment="head">
+    <style type="text/css">
+        .search {
+            width: 60px;
+            height: 30px;
+            border: none;
+            background: #1cbc9e;
+            color: #fff;
+            float: right;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        #diseaseType_top {
+            height: 30px;
+            width: calc(100% - 60px);
+            float: left;
+        }
+        .form-control {
+            background-color: #FFFFFF;
+            background-image: none;
+            border: 1px solid #e5e6e7;
+            border-radius: 1px;
+            color: inherit;
+            display: block;
+            padding: 4px 12px;
+            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+            width: 100%;
+        }
+    </style>
+    <div class="row border-bottom" style="height: 60px;">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li>
+                    <form onsubmit="return false;" role="form" style="padding: 0px">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <input type="text" id="diseaseType_top" class="form-control" placeholder="请输入搜索内容">
+                                    <button id="search_top" class="search"><i class="fa fa-search"></i>搜索</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </li>
+                <li>&nbsp;&nbsp;</li>
+                <li>
+                    <span class="m-r-sm text-muted welcome-message">欢迎使用, <span th:text="${session.userName}"></span>.</span>
+                </li>
+                <li>
+                    <a href="/logout">
+                        <i class="fa fa-sign-out"></i> 退出
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        $(document).ready(function () {
+            $("#search_top").on("click", function () {
+                $("#mainFrame").contents().find("#diseaseType_hidden6325").val($("#diseaseType_top").val());
+                var childEle = $("#mainFrame").contents().find("#diseaseType_hidden6325").val();
+                if (childEle != undefined) {
+                    $("#mainFrame")[0].contentWindow.searchList(false);
+                } else
+                if ($("#diseaseType_top").val() != "") {
+                    document.getElementById('mainFrame').src="/eeg/dashboard/list?search=" + $("#diseaseType_top").val();
+                    //window.location.href = "/eeg/dashboard/list?search=" + $("#diseaseType").val();
+                } else {
+                    layer.msg("搜索条件不能为空");
+                }
+            })
+        });
+    </script>
+
+</heads>

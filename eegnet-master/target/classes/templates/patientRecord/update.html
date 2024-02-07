@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>被试资料管理</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css"
+          rel="stylesheet">
+
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}"
+          href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css"
+          rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}"
+          href="../inspinia/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}"
+          href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}"
+          href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}"
+          href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/uploadImg/updateimg.css}" rel="stylesheet">
+    <style type="text/css">
+        .upimg {
+            width: 168px;
+            height: 100px;
+            background-position: 68px;
+        }
+
+        .upimg input {
+            width: 168px;
+            height: 100px;
+        }
+
+        #showui li {
+            width: 168px;
+            height: 100px;
+        }
+        #page-wrapper {
+            position: inherit;
+            margin: 0 0 0 0px;
+            min-height: 100vh;
+            padding: 0 0;
+        }
+        .wrapper-content {
+            padding: 20px 0 40px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<script th:src="@{/inspinia/js/plugins/validate/jquery.validate.min.js}"></script>
+
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/inspinia/js/jquery.form.js}"></script>
+<!-- Data picker -->
+<script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+<!-- Chosen -->
+<script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+<!-- Select2 -->
+<script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+
+<script th:src="@{/inspinia/js/plugins/bootstrap-markdown/bootstrap-markdown.js}"></script>
+
+<script th:src="@{/js/patientRecord/update.js}"></script>
+<div id="wrapper">
+
+    <!-- include menus.html -->
+<!--    <div th:replace="menus::common"></div>-->
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!-- include head.html -->
+<!--        <div th:replace="head::head"></div>-->
+        <div th:replace="navi::navi"></div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5 id="h5_patient_record_update"></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="mainForm" class="form-horizontal form-update" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>门诊号/住院号：</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="patientNumber" id="patientNumber" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>住院号：</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="hospitalNumber" id="hospitalNumber" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>姓名：</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="patientName" id="patientName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>性别：</label>
+                                    <div class="col-sm-5">
+                                        <select class="chosen-select" id="patientGender" name="patientGender">
+                                            <option value="1">男</option>
+                                            <option value="0">女</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!--<div class="form-group row">-->
+                                    <!--<label class="col-sm-2 control-label"><span style="color: red;">*</span>年龄：</label>-->
+                                    <!--<div class="col-sm-5">-->
+                                        <!--<input type="number" class="form-control" name="patientAge" id="patientAge">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>出生日期：</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group date" id="div_birthday">
+                                            <input readonly style="background: #fff;" type="text" class="input-sm form-control" name="birthday"
+                                                   id="birthday"/>
+                                            <span class="input-sm input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    文化程度：</label>
+                                    <div class="col-sm-5">
+                                        <select class="chosen-select" id="education" name="education">
+                                            <option value="1">文盲</option>
+                                            <option value="2">小学</option>
+                                            <option value="3">初中</option>
+                                            <option value="4">中专</option>
+                                            <option value="5">高中</option>
+                                            <option value="6">大专</option>
+                                            <option value="7">本科</option>
+                                            <option value="8">硕士</option>
+                                            <option value="9">博士</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>联系电话：</label>
+                                    <div class="col-sm-5">
+                                        <input type="tel" class="form-control" name="phone" id="phone" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">来源：</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="from" id="from" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">病床号：</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="bedNumber" id="bedNumber" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>疾病类型：</label>
+                                    <div class="col-sm-5">
+                                        <select class="chosen-select" id="diseaseType" name="diseaseType">
+                                            <option th:each="diseaseType:${diseaseTypeList}" th:value="${diseaseType.id}" th:text="${diseaseType.diseaseType}"></option>
+                                        </select>
+                                        <!--<input type="text" class="form-control" name="diseaseType" id="diseaseType">-->
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>诊断：</label>
+                                    <div class="col-sm-5">
+                                        <!--<input type="text" class="form-control" name="diagnose" id="diagnose">-->
+                                        <textarea rows="3" class="form-control" name="diagnose" id="diagnose" onkeyup="this.value=this.value.replace(/\s+/g,'')"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">严重程度：</label>
+                                    <div class="col-sm-5">
+                                        <select class="chosen-select" id="dimensions" name="dimensions">
+                                            <option value="1">一级</option>
+                                            <option value="2">二级</option>
+                                            <option value="3">三级</option>
+                                            <option value="4">四级</option>
+                                            <option value="5">五级</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">出院诊断：</label>
+                                    <div class="col-sm-5">
+                                        <textarea rows="3" class="form-control" name="outDiagnose" id="outDiagnose"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-5" style="text-align: center">
+                                        <button type="button" data-style="zoom-in"
+                                                class="btn btn-w-m btn-primary btn-update-footer" id="btn_save">
+                                            保&nbsp;&nbsp;存
+                                        </button>&nbsp;&nbsp;
+                                        <button type="button" class="btn btn-w-m btn-default btn-update-footer"
+                                                id="btn_cancle">
+                                            取&nbsp;&nbsp;消
+                                        </button>
+                                        <div class="col-sm-5"></div>
+                                        <input type="hidden" id="hidden_id"/></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- include foot.html -->
+        <div th:replace="foot::foot"></div>
+    </div>
+</div>
+</body>
+</html>

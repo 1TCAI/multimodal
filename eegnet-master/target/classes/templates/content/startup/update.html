@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>启动页管理</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css"
+          rel="stylesheet">
+
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}"
+          href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css"
+          rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}"
+          href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}"
+          href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/uploadImg/updateimg.css}" rel="stylesheet">
+    <style type="text/css">
+        .upimg {
+            width: 100px;
+            height: 180px;
+            background-position: 32px;
+        }
+
+        .upimg input {
+            width: 100px;
+            height: 180px;
+        }
+
+        #showui li {
+            width: 100px;
+            height: 180px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<script th:src="@{/inspinia/js/plugins/validate/jquery.validate.min.js}"></script>
+
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/inspinia/js/jquery.form.js}"></script>
+<!-- Data picker -->
+<script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+
+<script src="../../js/content/startup/update.js"></script>
+<div id="wrapper">
+
+    <div id="page-wrapper" class="gray-bg">
+        <!-- include head.html -->
+        <div th:replace="navi::navi"></div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5 id="h5_banner_update"></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="mainForm" class="form-horizontal form-update" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span
+                                            style="color: red;">*</span>操作系统：</label>
+                                    <div class="col-sm-5">
+                                        <select class="select2_demo_3 form-control" id="select_os">
+                                            <option value="I">苹果</option>
+                                            <option value="A">安卓</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span
+                                            style="color: red;">*</span>过期日期：</label>
+                                    <div class="col-sm-5">
+                                        <div class="input-group date" id="div_expireDate">
+                                            <input type="text" class="input-sm form-control" name="expireDate"
+                                                   id="text_expireDate"/>
+                                            <span class="input-sm input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row" style="display: none;">
+                                    <label class="col-sm-2 control-label">图片预览：</label>
+                                    <div class="col-sm-5">
+                                        <img id="showImge">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">
+                                        <span style="color: red;">*</span>上传图片：
+                                        <div id="div_attetion" style="color: gray;margin-top: 7px;">
+                                        </div>
+                                    </label>
+                                    <input type="hidden" id="imgSize" />
+                                    <div class="col-sm-5" >
+                                        <div class=" main input-group">
+                                            <div class="col-sm-12" style="padding: 0px">
+                                                <div id="showimg">
+                                                    <ul id="showui">
+                                                    </ul>
+                                                    <div id="showinput"> </div>
+                                                </div>
+                                                <div class="upimg" id="upimgId">
+                                                    <input type="hidden" id="imgSignature" name="authorization">
+                                                    <input type="hidden" id="imgPolicy" name="policy">
+                                                    <input type="file" id="upgteimg" name="file"/>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" class="form-control" name="uploadImgUrl"
+                                                   id="uploadImgUrl">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">点击地址：</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control" name="clickUrl" id="text_clickUrl">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                </div>
+                                <div class="form-group row" >
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-5" style="text-align: center">
+                                        <button type="button" data-style="zoom-in"
+                                                class="btn btn-w-m btn-primary btn-update-footer"
+                                                id="btn_save">
+                                            保&nbsp;&nbsp;存
+                                        </button>&nbsp;&nbsp;
+                                        <button type="button" class="btn btn-w-m btn-default btn-update-footer"
+                                                id="btn_cancle">
+                                            取&nbsp;&nbsp;消
+                                        </button>
+                                        <div class="col-sm-5">
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="hidden_id"/>
+
+                            </form>
+                            <div class="modal inmodal" id="uploadImgModal" role="dialog" aria-hidden="true"
+                                 data-backdrop="static">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <button type="button" id="btn_modal_close" class="close"
+                                                    data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                                    class="sr-only">Close</span></button>
+                                            <h5>文件上传(<span id="discraption" style="color: red">图片尺寸: 宽1334 * 高750</span>)
+                                            </h5>
+                                            <hr/>
+
+                                            <form class="form-horizontal" id="uploadImgForm" enctype="multipart/form-data">
+                                                <div class="form-group">
+                                                    <!--<label class="col-sm-3 control-label">上传图片：</label>-->
+                                                    <div class="col-sm-12">
+                                                        <div class="input-group">
+                                                            <input type="file" class="form-control col-sm-10" name="imgFile"  id="imgFile">
+                                                            <div class="col-sm-2" style="padding-top: 6px">
+                                                            <span class="input-group-btn">
+																	<button type="button" data-style="zoom-in" class="btn btn-primary btn-update-footer" id="btnUploadForStartUpImg">
+																		上&nbsp;&nbsp;传
+																	</button>
+																</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- include foot.html -->
+        <div th:replace="foot::foot"></div>
+    </div>
+</div>
+<script th:src="@{/inspinia/js/plugins/uploadImg/updateimg.js}"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<content th:fragment="patient_dialog">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form id="mainForm" class="form-horizontal form-update" enctype="multipart/form-data">
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span><select class="chosen-select" id="update_numberType" name="numberType">
+                                <option value="1">门诊号</option>
+                                <option value="0">住院号</option>
+                            </select>：</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="patientNumber" id="update_patientNumber">
+                            </div>
+                        </div>
+                        <!--<div class="form-group row">-->
+                            <!--<div class="col-sm-2"></div>-->
+                            <!--<label class="col-sm-3 control-label"><span style="color: red;">*</span>住院号：</label>-->
+                            <!--<div class="col-sm-4">-->
+                                <!--<input type="text" class="form-control" name="hospitalNumber" id="update_hospitalNumber">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span>姓名：</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="patientName" id="update_patientName">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span>性别：</label>
+                            <div class="col-sm-4">
+                                <select class="chosen-select" id="update_patientGender" name="patientGender">
+                                    <option value="1">男</option>
+                                    <option value="0">女</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--<div class="form-group row">-->
+                        <!--<label class="col-sm-3 control-label"><span style="color: red;">*</span>年龄：</label>-->
+                        <!--<div class="col-sm-4">-->
+                        <!--<input type="number" class="form-control" name="patientAge" id="patientAge">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span>出生日期：</label>
+                            <div class="col-sm-4">
+                                <div class="input-group date" id="update_div_birthday">
+                                    <input readonly style="background: #fff;" type="text" class="input-sm form-control"
+                                           name="birthday"
+                                           id="update_birthday"/>
+                                    <span class="input-sm input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span>联系电话：</label>
+                            <div class="col-sm-4">
+                                <input type="tel" class="form-control" name="phone" id="update_phone"
+                                       onkeyup="this.value=this.value.replace(/\D/g,'')"
+                                       onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span>疾病类型：</label>
+                            <div class="col-sm-4">
+                                <select class="chosen-select" id="update_diseaseType" name="diseaseType">
+                                    <option th:each="diseaseType:${diseaseTypeList_update}" th:value="${diseaseType.id}"
+                                            th:text="${diseaseType.diseaseType}"></option>
+                                </select>
+                                <!--<input type="text" class="form-control" name="diseaseType" id="diseaseType">-->
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label"><span style="color: red;">*</span>诊断：</label>
+                            <div class="col-sm-4">
+                                <!--<input type="text" class="form-control" name="diagnose" id="diagnose">-->
+                                <textarea rows="3" class="form-control" name="diagnose" id="update_diagnose"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label">文化程度：</label>
+                            <div class="col-sm-4">
+                                <select class="chosen-select" id="update_education" name="education">
+                                    <option value="">未知</option>
+                                    <option value="1">文盲</option>
+                                    <option value="2">小学</option>
+                                    <option value="3">初中</option>
+                                    <option value="4">中专</option>
+                                    <option value="5">高中</option>
+                                    <option value="6">大专</option>
+                                    <option value="7">本科</option>
+                                    <option value="8">硕士</option>
+                                    <option value="9">博士</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label">来源：</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="from" id="update_from">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label">病床号：</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" name="bedNumber" id="update_bedNumber">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label">严重程度：</label>
+                            <div class="col-sm-4">
+                                <select class="chosen-select" id="update_dimensions" name="dimensions">
+                                    <option value="">未知</option>
+                                    <option value="1">一级</option>
+                                    <option value="2">二级</option>
+                                    <option value="3">三级</option>
+                                    <option value="4">四级</option>
+                                    <option value="5">五级</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2"></div>
+                            <label class="col-sm-3 control-label">出院诊断：</label>
+                            <div class="col-sm-4">
+                                <textarea rows="3" class="form-control" name="outDiagnose" id="update_outDiagnose"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6" style="text-align: center">
+                                <button type="button" data-style="zoom-in"
+                                        class="btn btn-w-m btn-primary btn-update-footer" id="btn_save">
+                                    保&nbsp;&nbsp;存
+                                </button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-w-m btn-default btn-update-footer"
+                                        id="btn_cancle">
+                                    取&nbsp;&nbsp;消
+                                </button>
+                                <div class="col-sm-3"></div>
+                                <input type="hidden" id="hidden_id"/></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</content>

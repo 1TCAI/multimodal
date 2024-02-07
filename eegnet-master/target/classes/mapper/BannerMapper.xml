@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.pandabus.web.dao.BannerDao">
+
+	<select id="queryBannerList" resultType="Banner">
+		SELECT
+			b.id,
+		   	b.type,
+		   	b.title,
+		   	b.description,
+		   	b.img_url AS imgUrl,
+		   	b.click_url AS clickUrl,
+		   	b.sequence,
+		   	b.width,
+		   	b.height,
+		   	b.verify
+		FROM c_banner b
+        <where>
+        	<if test="type != null">
+            	AND b.type = #{type}
+        	</if>
+        	<if test="title != null and title != ''">
+            	AND b.title LIKE '%${title}%'
+        	</if>
+        </where>
+        ORDER BY b.verify,  b.create_date DESC ,b.type, b.sequence DESC
+        <if test="rows > 0">
+          	LIMIT #{page}, #{rows}
+        </if>
+	</select>
+	
+	<select id="queryBannerListCount" parameterType="Banner" resultType="int">
+		SELECT
+			COUNT(0)
+        FROM c_banner b
+        <where>
+        	<if test="type != null">
+            AND b.type = #{type}
+        	</if>
+        	<if test="title != null and title != ''">
+            AND b.title LIKE '%${title}%'
+        	</if>
+        </where>
+	</select>
+	
+	<insert id="add" parameterType="Banner">
+		INSERT INTO c_banner (`type`,
+							  title,
+							  description,
+							  img_url,
+							  click_url,
+							  sequence,
+							  width,
+							  height,
+							  create_date
+					 ) VALUE (#{type},
+							  #{title},
+							  #{description},
+							  #{imgUrl},
+							  #{clickUrl},
+							  #{sequence},
+							  #{width},
+							  #{height},
+							  CURRENT_TIMESTAMP
+					 )
+	</insert>
+	
+	<update id="update" parameterType="Banner">
+		UPDATE c_banner SET type = #{type},
+							title = #{title},
+							description = #{description},
+							img_url = #{imgUrl},
+							click_url = #{clickUrl},
+							sequence = #{sequence},
+							width = #{width},
+							height = #{height},
+							verify = 0
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryById" parameterType="long" resultType="Banner">
+		SELECT b.id,
+			   b.type,
+			   b.title,
+			   b.description,
+			   b.img_url AS imgUrl,
+			   b.click_url AS clickUrl,
+			   b.sequence,
+			   b.width,
+			   b.height
+		FROM c_banner b
+		WHERE id = #{id}
+	</select>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM c_banner WHERE id = #{id}
+	</delete>
+	
+	<update id="updateVerify">
+		UPDATE c_banner SET verify = #{verify} WHERE id = #{id}
+	</update>
+
+</mapper>

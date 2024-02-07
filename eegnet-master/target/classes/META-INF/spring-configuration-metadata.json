@@ -1,0 +1,112 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.pandabus.framework.config.DxConfig",
+      "name": "dx",
+      "type": "com.pandabus.framework.config.DxConfig"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "name": "redis",
+      "type": "com.pandabus.framework.config.RedisConfig"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "name": "shiro-redis.redis-manager",
+      "type": "com.pandabus.framework.config.ShiroRedisConfig"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.pandabus.framework.config.DxConfig",
+      "name": "dx.app-id",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.DxConfig",
+      "name": "dx.app-secret",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "redis.database",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "name": "redis.host",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "redis.max-idle",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "redis.max-total",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "redis.max-wait-millis",
+      "type": "java.lang.Long"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "redis.min-idle",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "name": "redis.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.RedisConfig",
+      "defaultValue": 0,
+      "name": "redis.port",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "defaultValue": 0,
+      "name": "shiro-redis.redis-manager.database",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "name": "shiro-redis.redis-manager.host",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "defaultValue": 0,
+      "name": "shiro-redis.redis-manager.max-age",
+      "type": "java.lang.Integer"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "name": "shiro-redis.redis-manager.password",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "defaultValue": 0,
+      "name": "shiro-redis.redis-manager.session-timeout",
+      "type": "java.lang.Long"
+    },
+    {
+      "sourceType": "com.pandabus.framework.config.ShiroRedisConfig",
+      "defaultValue": 0,
+      "name": "shiro-redis.redis-manager.timeout",
+      "type": "java.lang.Integer"
+    }
+  ]
+}

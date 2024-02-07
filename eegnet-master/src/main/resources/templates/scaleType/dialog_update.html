@@ -1,0 +1,90 @@
+<content th:fragment="scaleType_dialog">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-content">
+          <form id="mainForm" class="form-horizontal form-update" enctype="multipart/form-data">
+            <div class="form-group row">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-3 control-label"><span style="color: red;">*</span>量表类型：</label>
+              <div class="col-sm-4">
+                <input type="text" class="form-control" name="update_scaleType" id="update_scaleType">
+              </div>
+            </div>
+            <div style="display: none">
+              <div class="form-group row">
+                <div class="col-sm-2"></div>
+                <label class="col-sm-3 control-label"><span
+                    style="color: red;">*</span>题目数量：</label>
+                <div class="col-sm-4">
+                  <input type="tel" class="form-control" name="topicCount" id="topicCount"
+                         onkeyup="this.value=this.value.replace(/\D/g,'')"
+                         onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-2"></div>
+                <label class="col-sm-3 control-label"><span style="color: red;">*</span>分隔符：</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" name="separationCharacter"
+                         id="separationCharacter">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-2"></div>
+                <label class="col-sm-3 control-label"><span style="color: red;">*</span>公式：</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" name="formula" id="formula">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-2"></div>
+                <label class="col-sm-3 control-label"><span
+                    style="color: red;">*</span>评价标准：</label>
+                <div class="col-sm-4">
+                  <input type="text" class="form-control" name="judgementStandard">
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-3 control-label"><span style="color: red;">*</span>excel列标题(以;分割)：</label>
+              <div class="col-sm-4">
+<!--                <textarea rows="3" class="form-control" name="excelTitle" id="excelTitle" placeholder="前三列为 门诊号;住院号;日期"></textarea>-->
+                <!--<input type="text" class="form-control" name="excelTitle" id="excelTitle"-->
+                       <!--placeholder="前三列为 门诊号;住院号;日期">-->
+
+                <input  class="tagsinput form-control" name="update_excelTitle" id="update_excelTitle" type="text" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2"></div>
+              <label class="col-sm-3 control-label">备注：</label>
+              <div class="col-sm-4">
+                <!--<input type="text" class="form-control" name="remark" id="remark">-->
+                <textarea rows="3" class="form-control" name="remark" id="remark"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-6" style="text-align: center">
+                <button type="button" data-style="zoom-in"
+                        class="btn btn-w-m btn-primary btn-update-footer" id="btn_save">
+                  保&nbsp;&nbsp;存
+                </button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-w-m btn-default btn-update-footer"
+                        id="btn_cancle">
+                  取&nbsp;&nbsp;消
+                </button>
+                <div class="col-sm-3"></div>
+                <input type="hidden" id="hidden_id"/></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</content>

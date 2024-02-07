@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EEG Cloud 1</title>
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css}" rel="stylesheet">
+</head>
+
+<body class="gray-bg">
+
+<div class="loginColumns animated fadeInDown">
+    <div class="row">
+        <div class="col-md-6">
+            <img alt="EEG" src="img/login.png">
+        </div>
+        <div class="col-md-6">
+            <div class="ibox-content">
+                <p id="errorInfo" style="color: red;display: none;"></p>
+                <!--<form id="loginForm" class="m-t" role="form">-->
+                    <div class="form-group">
+                        <input type="text" name="username" id="username" class="form-control" placeholder="用户名" required="true">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" id="password" class="form-control" placeholder="密码" required="true">
+                    </div>
+                    <button id="submitButton" onclick="return false;" type="submit" class="btn btn-primary block full-width m-b" style="height: 32px;">登录</button>
+                    <!--<div class="i-checks"><label class=""> <div class="icheckbox_square-green" style="position: relative;"><input type="checkbox" value="true" name="rememberMe" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div> <i></i> 记住我 </label></div>-->
+                    <button type="reset" class="btn btn-outline full-width btn-default" style="height: 32px;">重置</button>
+
+                <!--</form>-->
+                <p class="m-t">
+                    <!--<small>Copyright© 2012-2018 EasyInnovation. All Rights Reserved.</small>-->
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div th:replace="foot::foot"></div>
+</div>
+<div id="dx" style="margin-bottom: 16px;"></div>
+<script src="https://cdn.dingxiang-inc.com/ctu-group/captcha-ui/index.js"></script>
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+<!-- iCheck -->
+<script th:src="@{/inspinia/js/plugins/iCheck/icheck.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    if (window.parent.document.getElementsByClassName("nav-header")[0]) {
+        window.parent.location.href = '/';
+    }
+    $('.i-checks').iCheck({
+        checkboxClass: 'icheckbox_square-green',
+        radioClass: 'iradio_square-green',
+    });
+
+    var state = [[${session.timeoutState}]];
+    if (state && 'timeout' == state) {
+        $("#errorInfo").html("登录过期，请重新登录");
+        $("#errorInfo").css("display", "inherit");
+    }
+
+    $(document).ready(function(){
+        var myCaptcha = _dx.Captcha(document.getElementById('dx'), {
+            appId: '646158030106890a042162e0c46f69f4',
+            style: 'popup',
+            language : 'cn',
+            customLanguage: {
+                pass_by_server : "无感验证成功"
+            },
+            // width : $('#loginForm').children('div').width(),
+            success: function (token) {
+                login(token);
+            }
+        });
+
+        document.getElementById('submitButton').onclick = function() {
+            if ($('#username').val() == '' ) {
+                Alert("", "请输入用户名");
+                return;
+            }
+            if ($('#password').val() == '') {
+                Alert("", "请输入密码");
+                return;
+            }
+
+            myCaptcha.show();
+        };
+
+        //
+        // myCaptcha.on('passByServer', function (token) {
+        //     console.log("passByServer === " + token)
+        //     // login(token);
+        // });
+
+
+        document.onkeydown = function (event) {
+            var e = event || window.event;
+            if (e && e.keyCode == 13) { // 回车键的键值为13
+                $("#submitButton").click(); // 调用登录按钮的登录事件
+            }
+        };
+
+        function login(token) {
+            $.ajax({
+                url: "login",
+                type: "post",
+                dataType: "json",
+                data: {username: $('#username').val(), password: $('#password').val(), dxtoken : token},
+                success: function(data) {
+                    if (data.code == 1) {
+                        window.location.href = "main";
+                    } else {
+                        myCaptcha.reload();
+                        myCaptcha.hide();
+                        $("#errorInfo").html(data.msg);
+                        $("#errorInfo").css("display", "inherit");
+                    }
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

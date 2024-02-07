@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pandabus.web.dao.SysRoleDao">
+
+    <select id="getRoleName" parameterType="String" resultType="SysRole">
+        SELECT
+              r.role_id AS roleId,
+              r.role_name AS  roleName
+        FROM  sys_role r
+    </select>
+
+    <select id="listSysRole" parameterType="String" resultType="SysRole">
+        SELECT
+        r.role_id AS roleId,
+        r.role_name AS roleName,
+        r.remark,
+        r.status
+        FROM sys_role r
+        <where>
+            <if test="roleName != null and roleName != ''">
+                AND r.role_name LIKE '%${roleName}%'
+            </if>
+        </where>
+        ORDER BY r.role_name DESC
+        <if test="rows > 0">
+            LIMIT #{page}, #{rows}
+        </if>
+    </select>
+
+    <select id="countListSysRole" parameterType="SysRole" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_role r
+        <where>
+            <if test="roleName != null and roleName != ''">
+                AND r.role_name LIKE '%${roleName}%'
+            </if>
+        </where>
+    </select>
+
+    <insert id="addSysRole" parameterType="SysRole" useGeneratedKeys="true" keyProperty="roleId">
+        INSERT INTO  sys_role  (
+							  role_name,
+							  remark,
+							  status,
+							  create_date
+					 ) VALUE (#{roleName},
+							  #{remark},
+							  #{status},
+							  CURRENT_TIMESTAMP
+					 )
+    </insert>
+
+    <update id="updateRole" parameterType="SysRole">
+         update sys_role set role_name = #{roleName},
+							remark = #{remark},
+							  <if test="status!=null ">status =  #{status},</if>
+							 update_date = CURRENT_TIMESTAMP
+        WHERE role_id = #{roleId}
+    </update>
+
+    <delete id="deleteSysRole" parameterType="int">
+		DELETE FROM sys_role WHERE role_id = #{roleId} AND role_id > 1
+	</delete>
+
+    <select id="getMaxMenu" resultType="SysMenu">
+        SELECT  sm.menu_id AS menuId,
+                sm.menu_name AS menuName,
+                sm.parent_id AS parentId
+        FROM  sys_menu sm
+        WHERE  sm.parent_id = 0
+    </select>
+
+    <select id="getChildMenu" parameterType="int" resultType="SysMenu">
+        SELECT  sm.menu_id AS menuId,
+                sm.menu_name AS menuName,
+                sm.parent_id AS parentId
+        FROM  sys_menu sm
+        WHERE sm.parent_id = #{menuId}
+    </select>
+
+    <select id="getGrandMenu" parameterType="int" resultType="SysMenu">
+        SELECT  sm.menu_id AS menuId,
+                sm.menu_name AS menuName,
+                sm.parent_id AS parentId
+        FROM  sys_menu sm
+        WHERE sm.parent_id = #{menuId}
+    </select>
+
+    <select id="getAllSysRoleUser" resultType="SysUser">
+        SELECT  su.user_id AS userId,
+                su.username AS username
+        FROM  sys_user su
+    </select>
+
+    <select id="getSysRoleMenu" resultType="SysMenu">
+        SELECT  sm.menu_id AS menuId,
+                sm.menu_name AS menuName,
+                sm.parent_id AS parentId
+        FROM  sys_menu sm
+        LEFT  JOIN sys_role_menu srm ON srm.menu_id = sm.menu_id
+        LEFT  JOIN sys_role sr ON sr.role_id = srm.role_id
+        WHERE sr.role_id = #{roleId}
+    </select>
+
+    <select id="getSysRoleUser" resultType="SysUser">
+        SELECT  su.user_id AS userId,
+                su.username AS username,
+        FROM  sys_user su
+        LEFT  JOIN sys_user_role sur ON sur.user_id = su.user_id
+        LEFT  JOIN sys_role sr ON sr.role_id = sur.role_id
+        WHERE sr.role_id = #{roleId}
+    </select>
+
+    <select id="getMenuIdByRoleId" resultType="SysRole">
+        SELECT  srm.menu_id AS menuId,
+                sr.role_id AS roleId,
+                sr.role_name AS roleName
+        FROM sys_role sr
+        LEFT  JOIN sys_role_menu srm ON srm.role_id = sr.role_id
+        WHERE  sr.role_id = #{roleId}
+    </select>
+
+    <select id="getRoleUserList" resultType="SysUser">
+        SELECT
+        sur.role_id AS roleId,
+        sur.user_id AS userId,
+        sr.role_name AS roleName,
+        su.username,
+        su.status
+        FROM sys_user_role sur
+        JOIN sys_role sr ON sr.role_id = sur.role_id
+        JOIN sys_user su ON su.user_id = sur.user_id
+        WHERE sur.role_id = #{roleId}
+        <if test="rows > 0">
+            LIMIT #{page}, #{rows}
+        </if>
+    </select>
+
+    <select id="countRoleUserList" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_user_role sur
+        LEFT JOIN sys_role sr ON sr.role_id = sur.role_id
+        LEFT JOIN sys_user su ON su.user_id = sur.user_id
+        WHERE  sur.role_id = #{roleId}
+    </select>
+
+    <delete id="deleteSysRoleMenu" parameterType="int">
+		DELETE FROM sys_role_menu WHERE role_id = #{roleId}
+	</delete>
+
+    <insert id="insertSysRoleMenu" parameterType="java.util.List">
+        INSERT INTO
+          sys_role_menu (role_id,menu_id)
+        VALUES
+        <foreach collection="list" separator="," item="i">
+            (#{i.roleId},#{i.menuId})
+        </foreach>
+    </insert>
+
+    <select id="findSysRoleMenu" parameterType="int" resultType="SysRoleMenu">
+        SELECT DISTINCT
+            rm.menu_id AS menuId,
+        	m.parent_id AS parentId,
+            CASE WHEN srm.parent_id IS NULL THEN '0' ELSE '1' END AS isparent
+        FROM sys_role_menu rm
+        JOIN sys_menu m ON rm.menu_id = m.menu_id
+		LEFT JOIN sys_menu srm ON srm.parent_id = rm.menu_id
+        WHERE rm.role_id = #{roleId}
+    </select>
+
+    <select id="getRole" parameterType="int" resultType="SysRole">
+        SELECT
+            role_name AS roleName,
+        	remark AS remark,
+        	status
+        FROM sys_role
+        WHERE role_id = #{roleId}
+    </select>
+</mapper>

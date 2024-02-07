@@ -1,0 +1,56 @@
+<navi th:fragment="navi">
+
+    <div id="titleAllDiv" class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-12">
+            <h2 id="titleH2"></h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a id="titleA"></a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a id="titleStrong"></a>
+                </li>
+                <li id="subTitleStrongLi" style="display:none" class="breadcrumb-item">
+                    <strong id="subTitleStrong"></strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        String.prototype.startWith = function(str){
+            var reg = new RegExp("^"+str);
+            return reg.test(this);
+        }
+
+        var menus = [[${session.menus}]];
+        var requestUri = [[${#httpServletRequest.requestURI}]];
+        if (requestUri == "/main") {
+            $("#titleAllDiv").hide();
+        }
+
+        if(menus == null){
+            window.location.href = "/";
+        }
+
+        menus.forEach(m => {
+            if (requestUri.startWith(m.url)) {
+                $("#titleA").text(m.menuName);
+                var childMenus = m.children
+                childMenus.forEach(cm => {
+                    if (requestUri == cm.url) {
+                        $("#titleH2").text(cm.menuName);
+                        $("#titleStrong").text(cm.menuName);
+                        $("#titleStrong").attr('href', cm.url);
+                        $("#titleStrong").addClass('active');
+                    } else if ((requestUri + "/").startWith(cm.url + "/")) {
+                        $("#titleH2").text(cm.menuName);
+                        $("#titleStrong").text(cm.menuName);
+                        $("#titleStrong").attr('href', cm.url);
+                        $("#titleStrong").removeClass('active');
+                    }
+                });
+            }
+        });
+    </script>
+</navi>

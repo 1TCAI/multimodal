@@ -1,0 +1,74 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+mybatis:
+  type-aliases-package: com.pandabus.web.entity
+  mapper-locations: classpath:mapper/*.xml
+
+spring:
+  mvc:
+    favicon:
+      enabled: true
+  thymeleaf:
+    cache: false
+    mode: HTML
+    prefix: classpath:templates/
+    suffix: .html
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://rm-wz9727s1ckc00svj2.mysql.rds.aliyuncs.com:3306/eeg?useUnicossssde=true&characterEncoding=UTF-8
+    username: eegcloud
+    password: Szry_Siat
+    driver-class-name: com.mysql.jdbc.Driver
+    # 连接池设置
+    initial-size: 8
+    min-idle: 8
+    max-active: 16
+    # 配置获取连接等待超时的时间,单位毫秒
+    max-wait: 30000
+    # 是否自动回收超时连接 ，Timeout连接超时时间
+    remove-abandoned: true
+    remove-abandoned-timeout: 300
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    time-between-eviction-runs-millis: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    min-evictable-idle-time-millis: 300000
+    validation-query: SELECT 'x'
+    test-while-idle: true
+    test-on-borrow: false
+    test-on-return: false
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,slf4j
+    logSlowSql: true
+  servlet:
+    multipart:
+      max-file-size: 300MB # 最大支持文件大小
+      max-request-size: 300MB # 最大支持请求大小
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: Ffpanda123!@#
+  min-idle: 0
+  max-idle: 8
+  max-total: 32
+  max-wait-millis: 1000
+  database: 0
+
+
+shiro-redis:
+  redis-manager:
+    host: 127.0.0.1:6379
+    password: Ffpanda123!@#
+    timeout: 3000
+    #    session 过期时间 毫秒 3小时
+    sessionTimeout: 10800000
+    # cookie 过期时间  秒  30天
+    maxAge: 2592000
+    database: 0
+
+dx:
+  appId: 646158030106890a042162e0c46f69f4
+  appSecret: 1fe1233b63f6c14b4fb832b96d890ef2

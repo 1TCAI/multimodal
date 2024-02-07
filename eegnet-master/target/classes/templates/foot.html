@@ -1,0 +1,10 @@
+<foot th:fragment="foot">
+    <div class="footer">
+        <div class="float-right">
+            EEG Cloud
+        </div>
+        <div>
+            <strong>Copyright</strong> EEG Cloud &copy; 2019-<th:block th:text="${#dates.format(new java.util.Date().getTime(), 'yyyy')}"></th:block>
+        </div>
+    </div>
+</foot>

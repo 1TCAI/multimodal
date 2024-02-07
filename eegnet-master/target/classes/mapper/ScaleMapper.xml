@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.pandabus.web.dao.ScaleDao">
+
+	<select id="queryScaleList" resultType="Scale">
+		SELECT
+		s.id,
+		s.scale_type AS scaleType,
+		s.patient_number AS patientNumber,
+		s.hospital_number AS hospitalNumber,
+		s.row_date AS rowDate,
+		filed_1 AS filed1,
+		filed_2 AS filed2,
+		filed_3 AS filed3,
+		filed_4 AS filed4,
+		filed_5 AS filed5,
+		filed_6 AS filed6,
+		filed_7 AS filed7,
+		filed_8 AS filed8,
+		filed_9 AS filed9,
+		filed_10 AS filed10,
+		filed_11 AS filed11,
+		filed_12 AS filed12,
+		filed_13 AS filed13,
+		filed_14 AS filed14,
+		filed_15 AS filed15,
+		filed_16 AS filed16,
+		filed_17 AS filed17,
+		filed_18 AS filed18,
+		filed_19 AS filed19,
+		filed_20 AS filed20,
+		filed_21 AS filed21,
+		filed_22 AS filed22,
+		filed_23 AS filed23,
+		filed_24 AS filed24,
+		filed_25 AS filed25,
+		filed_26 AS filed26,
+		filed_27 AS filed27,
+		filed_28 AS filed28,
+		filed_29 AS filed29,
+		filed_30 AS filed30,
+		DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate
+		FROM patient_record b RIGHT JOIN scale s ON b.patient_number= s.patient_number
+		<where>
+			<if test="patientGender != null">
+				AND b.patient_gender = #{patientGender}
+			</if>
+			<if test="diseaseType != null and diseaseType != ''">
+				AND b.disease_type = #{diseaseType}
+			</if>
+			<if test="diagnose != null and diagnose != ''">
+				AND b.diagnose LIKE '%' #{diagnose} '%'
+			</if>
+			<if test="birthday != null and birthday != ''">
+				AND b.birthday = #{birthday}
+			</if>
+			<if test="dimensions != null">
+				AND b.dimensions = #{dimensions}
+			</if>
+			<if test="scaleType != null">
+				AND s.scale_type = #{scaleType}
+			</if>
+			<if test="patientId != null and patientId != ''">
+				AND s.patient_number_id = #{patientId}
+			</if>
+			<if test="patientNumber != null and patientNumber != ''">
+				AND (s.patient_number LIKE '%' #{patientNumber} '%' OR s.hospital_number LIKE '%' #{patientNumber} '%')
+			</if>
+			<if test="rowDate != null and rowDate != ''">
+				AND s.row_date = #{rowDate}
+			</if>
+		</where>
+		ORDER BY s.create_date DESC
+		<if test="rows > 0">
+			LIMIT #{page}, #{rows}
+		</if>
+	</select>
+
+	<select id="queryScaleListCount" parameterType="Scale" resultType="int">
+		SELECT
+		COUNT(0)
+		FROM patient_record b RIGHT JOIN scale s ON b.patient_number= s.patient_number
+		<where>
+			<if test="patientGender != null">
+				AND b.patient_gender = #{patientGender}
+			</if>
+			<if test="diseaseType != null and diseaseType != ''">
+				AND b.disease_type = #{diseaseType}
+			</if>
+			<if test="diagnose != null and diagnose != ''">
+				AND b.diagnose LIKE '%' #{diagnose} '%'
+			</if>
+			<if test="birthday != null and birthday != ''">
+				AND b.birthday = #{birthday}
+			</if>
+			<if test="dimensions != null">
+				AND b.dimensions = #{dimensions}
+			</if>
+			<if test="scaleType != null">
+				AND s.scale_type = #{scaleType}
+			</if>
+			<if test="patientId != null and patientId != ''">
+				AND s.patient_number_id = #{patientId}
+			</if>
+			<if test="patientNumber != null and patientNumber != ''">
+				AND (s.patient_number LIKE '%' #{patientNumber} '%' OR s.hospital_number LIKE '%' #{patientNumber} '%')
+			</if>
+			<if test="rowDate != null and rowDate != ''">
+				AND s.row_date = #{rowDate}
+			</if>
+		</where>
+	</select>
+
+	<insert id="addBatch" parameterType="java.util.List">
+		INSERT IGNORE INTO scale (
+		scale_type,
+		patient_number,
+		patient_number_id,
+		hospital_number,
+		row_date,
+		filed_1,
+		filed_2,
+		filed_3,
+		filed_4,
+		filed_5,
+		filed_6,
+		filed_7,
+		filed_8,
+		filed_9,
+		filed_10,
+		filed_11,
+		filed_12,
+		filed_13,
+		filed_14,
+		filed_15,
+		filed_16,
+		filed_17,
+		filed_18,
+		filed_19,
+		filed_20,
+		filed_21,
+		filed_22,
+		filed_23,
+		filed_24,
+		filed_25,
+		filed_26,
+		filed_27,
+		filed_28,
+		filed_29,
+		filed_30,
+		create_date
+		) VALUES
+		<foreach collection="scaleList" item="item" separator=",">
+			( #{item.scaleType},
+			#{item.patientNumber},
+			#{item.patientNumberId},
+			#{item.hospitalNumber},
+			#{item.rowDate},
+			#{item.filed1},
+			#{item.filed2},
+			#{item.filed3},
+			#{item.filed4},
+			#{item.filed5},
+			#{item.filed6},
+			#{item.filed7},
+			#{item.filed8},
+			#{item.filed9},
+			#{item.filed10},
+			#{item.filed11},
+			#{item.filed12},
+			#{item.filed13},
+			#{item.filed14},
+			#{item.filed15},
+			#{item.filed16},
+			#{item.filed17},
+			#{item.filed18},
+			#{item.filed19},
+			#{item.filed20},
+			#{item.filed21},
+			#{item.filed22},
+			#{item.filed23},
+			#{item.filed24},
+			#{item.filed25},
+			#{item.filed26},
+			#{item.filed27},
+			#{item.filed28},
+			#{item.filed29},
+			#{item.filed30},
+			CURRENT_TIMESTAMP
+			)
+		</foreach>
+	</insert>
+
+	<select id="queryScaleByPatientNumberAndDateAndScaleType" resultType="Scale">
+		SELECT
+		s.id,
+		s.scale_type,
+		s.patient_number AS patientNumber,
+		s.hospital_number AS hospitalNumber,
+		s.row_date AS rowDate
+		FROM scale s
+		<where>
+			<if test="patientNumber != null and patientNumber != ''">
+				AND s.patient_number = #{patientNumber}
+			</if>
+			<if test="rowDate != null and rowDate != ''">
+				AND s.row_date = #{rowDate}
+			</if>
+			<if test="scaleType != null and scaleType != ''">
+				AND s.scale_type = #{scaleType}
+			</if>
+		</where>
+	</select>
+
+	<update id="updateById" parameterType="Scale">
+		UPDATE scale SET
+		<if test="scaleType != null and scaleType != ''">
+			scale_type = #{scaleType},
+		</if>
+		patient_number = #{patientNumber},
+		hospital_number = #{hospitalNumber},
+		<if test="rowDate != null and rowDate != ''">
+			row_date = #{rowDate},
+		</if>
+		filed_1 = #{filed1},
+		filed_2 = #{filed2},
+		filed_3 = #{filed3},
+		filed_4 = #{filed4},
+		filed_5 = #{filed5},
+		filed_6 = #{filed6},
+		filed_7 = #{filed7},
+		filed_8 = #{filed8},
+		filed_9 = #{filed9},
+		filed_10 = #{filed10},
+		filed_11 = #{filed11},
+		filed_12 = #{filed12},
+		filed_13 = #{filed13},
+		filed_14 = #{filed14},
+		filed_15 = #{filed15},
+		filed_16 = #{filed16},
+		filed_17 = #{filed17},
+		filed_18 = #{filed18},
+		filed_19 = #{filed19},
+		filed_20 = #{filed20},
+		filed_21 = #{filed21},
+		filed_22 = #{filed22},
+		filed_23 = #{filed23},
+		filed_24 = #{filed24},
+		filed_25 = #{filed25},
+		filed_26 = #{filed26},
+		filed_27 = #{filed27},
+		filed_28 = #{filed28},
+		filed_29 = #{filed29},
+		filed_30 = #{filed30},
+		create_date = CURRENT_TIMESTAMP
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryById" resultType="Scale">
+		SELECT
+		scale.id,
+		scale.scale_type AS scaleType,
+		scale_type.scale_type AS scaleTypeName,
+		scale.patient_number AS patientNumber,
+		hospital_number AS hospitalNumber,
+		row_date AS rowDate,
+		filed_1 AS filed1,
+		filed_2 AS filed2,
+		filed_3 AS filed3,
+		filed_4 AS filed4,
+		filed_5 AS filed5,
+		filed_6 AS filed6,
+		filed_7 AS filed7,
+		filed_8 AS filed8,
+		filed_9 AS filed9,
+		filed_10 AS filed10,
+		filed_11 AS filed11,
+		filed_12 AS filed12,
+		filed_13 AS filed13,
+		filed_14 AS filed14,
+		filed_15 AS filed15,
+		filed_16 AS filed16,
+		filed_17 AS filed17,
+		filed_18 AS filed18,
+		filed_19 AS filed19,
+		filed_20 AS filed20,
+		filed_21 AS filed21,
+		filed_22 AS filed22,
+		filed_23 AS filed23,
+		filed_24 AS filed24,
+		filed_25 AS filed25,
+		filed_26 AS filed26,
+		filed_27 AS filed27,
+		filed_28 AS filed28,
+		filed_29 AS filed29,
+		filed_30 AS filed30
+		FROM scale LEFT JOIN scale_type ON scale.scale_type = scale_type.id
+		WHERE scale.id = #{id}
+	</select>
+
+	<select id="getCountByDate" resultType="int">
+		SELECT COUNT(0) AS cnt
+		FROM scale
+		WHERE DATE_FORMAT(create_date, '%Y-%m-%d') <![CDATA[<]]> #{startDate}
+	</select>
+
+	<select id="getChartData" resultType="Map">
+		SELECT
+		COUNT(0) AS cnt,
+		DATE_FORMAT(create_date, '%Y-%m-%d') AS createDate
+		FROM scale
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND patient_number LIKE '%' #{keyset} '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(create_date, '%Y-%m-%d') >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(create_date, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
+			</if>
+		</where>
+		GROUP BY createDate
+	</select>
+
+	<select id="queryAllCount" parameterType="String" resultType="int">
+		SELECT
+		COUNT(0) AS cnt
+		FROM scale
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND patient_number LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+	</select>
+</mapper>

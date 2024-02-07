@@ -1,0 +1,85 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<menus th:fragment="common">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+
+            <ul class="nav metismenu" id="side-menu">
+
+                <!-- 头像 -->
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <img alt="image" class="rounded-circle" style="height: 48px;width: 48px"
+                             th:src="@{/img/logo.png}" src="../img/logo.png"/>
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span th:text="${session.userName}" class="block m-t-xs font-bold"></span>
+                            <!--<span class="text-muted text-xs block"><b class="caret"></b></span>-->
+                        </a>
+
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <!--                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>-->
+                            <!--                            <li><a class="dropdown-item" href="contacts.html">Contacts</a></li>-->
+                            <!--                            <li><a class="dropdown-item" href="mailbox.html">Mailbox</a></li>-->
+                            <li class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/">退出</a></li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        <img alt="image" class="rounded-circle" style="height: 48px;width: 48px"
+                             th:src="@{/img/logo.png}" src="../img/logo.png"/>
+                    </div>
+                </li>
+
+                <!-- 菜单 ${#httpServletRequest.requestURI} -->
+                <li th:each="m:${session.menus}" th:class="${mStat.count == 1} ? 'active' : ''">
+                    <a th:href="${m.url}" th:action="${m.url}" href="javascript:void(0);"
+                       onclick="menuClickEvent(0,this);return false;"><i th:attrappend="class=${m.icon}"></i> <span
+                            class="nav-label" th:text="${m.menuName}"></span> <span class="fa arrow"></span></a>
+                    <ul th:if="${m['children']} ne null" class="nav nav-second-level">
+                        <li th:each="subm:${m['children']}" class="cmenu"><a th:action="${subm.url}"
+                                                                             href="javascript:void(0);"
+                                                                             onclick="menuClickEvent(1,this);return false;"
+                                                                             th:text="${subm.menuName}"></a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+    </nav>
+
+    <script>
+        $(document).ready(function () {
+            //$(".active li").val();
+            // console.log( $("[action]")[0]);
+            menuClickEvent($("[action]")[0]);
+        });
+
+        function menuClickEvent(level,ele) {
+            var serviceUrl = ele.getAttribute("action");
+            if (!serviceUrl) {
+                //带子菜单的
+                $(".active").removeClass("active");
+                fix_height();
+                // $(ele.parentElement).addClass('active');
+            } else {
+                //一级菜单 点击
+                if (level==0){
+                    $(".active").removeClass("active");
+                    $(ele.parentElement).addClass('active');
+                }
+
+                if (serviceUrl == "login" || serviceUrl == "/") {
+                    window.location.href = "main";
+                } else {
+                    document.getElementById('mainFrame').src = serviceUrl;
+                    $("#mainFrame").css("height", window.innerHeight - 65);
+                }
+            }
+
+        }
+
+        window.onresize = function () {
+            $("#mainFrame").css("height", window.innerHeight - 65);
+        }
+    </script>
+</menus>

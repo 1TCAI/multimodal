@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>无权限</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center animated fadeInDown">
+        <h1>403</h1>
+        <h3 class="font-bold">抱歉，您暂无此操作权限</h3>
+
+        <div class="error-desc">
+            您暂无此操作权限,如有疑问请联系管理员
+            <br/>
+            <a href="javascript:history.back(-1);" class="btn btn-primary m-t">返回</a>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/inspinia/js/popper.min.js}"></script>
+    <script th:src="@{/inspinia/js/bootstrap.js}"></script>
+
+</body>
+
+</html>

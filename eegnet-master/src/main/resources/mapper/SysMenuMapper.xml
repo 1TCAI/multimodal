@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pandabus.web.dao.SysMenuDao">
+
+    <select id="listAllMenus" resultType="SysMenu">
+		SELECT
+            m.menu_id AS menuId,
+            m.parent_id AS parentId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.menu_type AS menuType,
+        	m.icon,
+        	m.sequence
+        FROM sys_menu m
+        ORDER BY m.sequence
+    </select>
+
+    <select id="listParentMenus" resultType="SysMenu">
+		SELECT
+            m.menu_id AS menuId,
+            m.parent_id AS parentId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.menu_type AS menuType,
+        	m.icon,
+        	m.sequence
+        FROM sys_menu m
+        WHERE m.parent_id = 0
+        ORDER BY m.sequence
+    </select>
+
+    <select id="listSubMenus" resultType="SysMenu">
+		SELECT
+            m.menu_id AS menuId,
+            m.parent_id AS parentId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.menu_type AS menuType,
+        	m.icon,
+        	m.sequence
+        FROM sys_menu m
+        WHERE m.parent_id = #{parentId}
+        ORDER BY m.sequence
+    </select>
+
+    <select id="listSubButtons" resultType="SysMenu">
+		SELECT
+            m.menu_id AS menuId,
+            m.parent_id AS parentId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.menu_type AS menuType,
+        	m.icon,
+        	m.sequence
+        FROM sys_menu m
+        WHERE m.parent_id = #{parentId}
+        ORDER BY m.sequence
+    </select>
+
+    <select id="listParentMenusByRoleId" parameterType="int" resultType="SysMenu">
+        SELECT
+            m.menu_id AS menuId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.icon
+        FROM sys_role_menu rm
+        LEFT JOIN sys_menu m ON rm.menu_id = m.menu_id
+        LEFT JOIN sys_role r ON rm.role_id = r.role_id
+        WHERE rm.role_id = #{roleId}
+        AND m.menu_type = 'M'
+        AND m.parent_id = 0
+        ORDER BY m.sequence
+    </select>
+
+    <select id="listMenusByParentId" resultType="SysMenu">
+        SELECT
+            m.menu_id AS menuId,
+        	m.url,
+        	m.parent_id AS parentId,
+        	m.menu_name AS menuName,
+        	m.menu_type AS menuType,
+        	m.perms,
+        	m.icon
+        FROM sys_role_menu rm
+        LEFT JOIN sys_menu m ON rm.menu_id = m.menu_id
+        LEFT JOIN sys_role r ON rm.role_id = r.role_id
+        WHERE rm.role_id = #{roleId}
+        AND m.menu_type = 'M'
+        AND m.parent_id = #{parentId}
+        ORDER BY m.sequence
+    </select>
+
+    <select id="listButtonsByRoleId" parameterType="int" resultType="SysMenu">
+        SELECT
+            m.menu_id AS menuId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.icon
+        FROM sys_role_menu rm
+        LEFT JOIN sys_menu m ON rm.menu_id = m.menu_id
+        LEFT JOIN sys_role r ON rm.role_id = r.role_id
+        WHERE rm.role_id = #{roleId}
+    </select>
+
+  <select id="selectResourceById" parameterType="int" resultType="SysMenu">
+		SELECT
+          m.menu_id AS menuId,
+          m.parent_id AS parentId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.menu_type AS menuType,
+        	m.icon,
+        	m.sequence
+        FROM sys_menu m
+        WHERE menu_id = #{id}
+    </select>
+
+  <select id="listPageMenus" resultType="SysMenu">
+		SELECT
+            m.menu_id AS menuId,
+            m.parent_id AS parentId,
+        	m.url,
+        	m.menu_name AS menuName,
+        	m.perms,
+        	m.menu_type AS menuType,
+        	m.icon,
+        	m.sequence
+        FROM sys_menu m
+        WHERE m.parent_id <![CDATA[<>]]> 0
+          AND m.menu_type = 'M'
+        ORDER BY m.sequence
+    </select>
+
+  <insert id="addMenu" parameterType="SysMenu">
+        INSERT INTO  sys_menu  (
+							  menu_name,
+							  parent_id,
+							  url,
+							  menu_type,
+							  icon,
+							  create_date,
+							  perms,
+							  sequence
+					 ) VALUE (#{menuName},
+							  #{parentId},
+							  #{url},
+							  #{menuType},
+							  #{icon},
+							  CURRENT_TIMESTAMP,
+							  #{perms},
+							  #{sequence}
+					 )
+    </insert>
+
+  <update id="updateMenuById" parameterType="SysMenu">
+        UPDATE sys_menu u
+        SET u.menu_name = #{menuName},
+            u.parent_id = #{parentId},
+            u.url = #{url},
+            u.icon = #{icon},
+            u.perms = #{perms},
+            u.sequence = #{sequence},
+            u.menu_type = #{menuType}
+        WHERE u.menu_id = #{menuId}
+
+    </update>
+</mapper>

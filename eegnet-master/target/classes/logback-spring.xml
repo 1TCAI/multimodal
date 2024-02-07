@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<configuration>
+
+	<springProfile name="dev">
+		<property name="LOGHOME" value="logs"/>
+	</springProfile>
+
+	<springProfile name="prod, test">
+		<property name="LOGHOME" value="/data/pandabus-eeg-logs"/>
+	</springProfile>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!--日志总文件-->
+	<appender name="FILEINFO" class="ch.qos.logback.core.rolling.RollingFileAppender" >
+		<file>${LOGHOME}/pandabus-eeg-info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOGHOME}/pandabus-eeg-info.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>200</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!--错误日志总文件-->
+	<appender name="FILEERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGHOME}/pandabus-eeg-err.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOGHOME}/pandabus-eeg-err.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{0} - %msg%n</pattern>
+		</encoder>
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+	</appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILEINFO"/>
+        <appender-ref ref="FILEERROR" />
+    </root>
+
+</configuration>

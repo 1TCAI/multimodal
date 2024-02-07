@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>系统日志</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}" href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
+
+    <!-- Ladda style -->
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/css/common.css}" href="../css/common.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<!-- Data picker -->
+<script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+<!-- Chosen -->
+<script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+<!-- Sweet alert -->
+<script th:src="@{/js/sweetalert.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+
+<!-- Select2 -->
+<script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+<!--dataTables-->
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.bootstrap4.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.reload.js}"></script>
+<script src="../js/system/log/index.js"></script>
+
+<div id="wrapper">
+
+    <!-- include menus.html -->
+<!--    <div th:replace="menus::common"></div>-->
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!-- include head.html -->
+<!--        <div th:replace="head::head"></div>-->
+        <div th:replace="navi::navi"></div>
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="ibox-content m-b-sm border-bottom">
+                <form onsubmit="return false;" role="form" style="padding: 0px">
+                    <div class="row">
+                        <div class="col-sm-12" >
+                            <button type="button" class="btn btn-outline btn-primary btn-tool btn-sm" id="btn_search" onclick="reload()">
+                                <i class="fa fa-search"></i> 筛选
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="font-normal" for="userName">用户名</label>
+                                <input type="text" id="userName" class="form-control" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3" style="margin-top: -7px">
+                            <div class="form-group">
+                                <label class="col-form-label" >操作日期</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input readonly style="background: #fff;" id="startDate" name="startDate" autocomplete="off" type="text" class="form-control">
+                                    <span class="input-group-addon" style="border:none;">～</span>
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input readonly style="background: #fff;" id="endDate" name="endDate" autocomplete="off" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        <div class="col-sm-5" style="text-align: right">-->
+<!--                            <label class="font-normal">&nbsp;</label>-->
+<!--                            <div class="form-group">-->
+<!--                                <button id="query" type="button" class="btn btn-outline btn-default" onclick="reload()"><i class="fa fa-search"></i> 筛选</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </div>
+
+                </form>
+
+                <table id="table_list" class="table table-striped table-bordered" style="width:100%;text-align: center;"></table>
+
+            </div>
+        </div>
+        <!-- include foot.html -->
+<!--        <div th:replace="foot::foot"></div>-->
+    </div>
+</div>
+</body>
+</html>

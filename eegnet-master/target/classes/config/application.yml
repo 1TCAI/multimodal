@@ -1,0 +1,5 @@
+app :
+  name : PandabusWebStartup
+spring :
+  profiles :
+    active : dev

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.pandabus.web.dao.ScaleTypeDao">
+
+	<select id="queryScaleTypeList" resultType="ScaleType">
+		SELECT
+				b.id,
+				b.scale_type AS scaleType,
+				b.topic_count AS topicCount,
+				b.separation_character AS separationCharacter,
+				b.formula,
+				b.judgement_standard AS judgementStandard,
+				b.remark,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate,
+				b.creater,
+				DATE_FORMAT(b.update_date, '%Y-%m-%d') AS updateDate,
+				b.updater,
+				b.is_deleted AS isDeleted,
+				b.excel_title AS excelTitle
+		FROM scale_type b
+        <where>
+        	<if test="scaleType != null and scaleType != ''">
+            	AND b.scale_type LIKE '%' #{scaleType} '%'
+        	</if>
+					<if test="isDeleted != null">
+						AND b.is_deleted = #{isDeleted}
+					</if>
+        </where>
+        ORDER BY b.create_date DESC
+        <if test="rows > 0">
+          	LIMIT #{page}, #{rows}
+        </if>
+	</select>
+	
+	<select id="queryScaleTypeListCount" parameterType="ScaleType" resultType="int">
+		SELECT
+			COUNT(0)
+        FROM scale_type b
+					<where>
+						<if test="scaleType != null and scaleType != ''">
+							AND b.scale_type LIKE '%' #{scaleType} '%'
+						</if>
+						<if test="isDeleted != null">
+							AND b.is_deleted = #{isDeleted}
+						</if>
+					</where>
+	</select>
+	
+	<insert id="add" parameterType="ScaleType">
+		INSERT INTO scale_type (`scale_type`,
+								topic_count,
+								separation_character,
+								formula,
+								judgement_standard,
+								remark,
+							  create_date,
+							  creater,
+							  is_deleted,
+								excel_title
+					 ) VALUE (#{scaleType},
+					 			#{topicCount},
+					 			#{separationCharacter},
+					 			#{formula},
+					 			#{judgementStandard},
+					 			#{remark},
+							  CURRENT_TIMESTAMP,
+							  #{creater},
+							  0,
+							  #{excelTitle}
+					 )
+	</insert>
+	
+	<update id="update" parameterType="ScaleType">
+		UPDATE scale_type SET scale_type = #{scaleType},
+							topic_count = #{topicCount},
+							separation_character = #{separationCharacter},
+							formula = #{formula},
+							judgement_standard = #{judgementStandard},
+							remark = #{remark},
+							update_date = CURRENT_TIMESTAMP,
+							updater = #{updater},
+							excel_title = #{excelTitle}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryById" parameterType="long" resultType="ScaleType">
+		SELECT b.scale_type AS scaleType,
+				b.topic_count AS topicCount,
+				b.separation_character AS separationCharacter,
+				b.formula,
+				b.judgement_standard AS judgementStandard,
+				b.remark,
+				b.is_deleted AS isDeleted,
+				b.excel_title AS excelTitle
+		FROM scale_type b
+		WHERE id = #{id}
+	</select>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM scale_type
+		WHERE id = #{id}
+	</delete>
+
+	<update id="updateStatus">
+        UPDATE scale_type
+        SET is_deleted = #{status}
+        WHERE id = #{id}
+    </update>
+</mapper>

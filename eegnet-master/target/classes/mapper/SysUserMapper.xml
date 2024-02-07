@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pandabus.web.dao.SysUserDao">
+
+    <select id="getByUsername" parameterType="String" resultType="SysUser">
+        SELECT
+            u.user_id AS userId,
+            u.username,
+            u.password,
+            u.salt,
+            u.status,
+            ur.role_id AS roleId,
+            u.company_id AS companyId
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
+        LEFT JOIN sys_role sr ON sr.role_id = ur.role_id
+        WHERE u.username = #{username}
+        AND u.status = 1
+        AND sr.status = 1
+    </select>
+
+    <select id="getAll" parameterType="String" resultType="SysUser">
+        SELECT
+        u.user_id AS userId,
+        u.username,
+        u.password,
+        u.status,
+        r.role_name AS roleName,
+        u.company_id AS companyId
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
+        LEFT JOIN sys_role r ON r.role_id = ur.role_id
+        <where>
+            <if test="username != null and username != ''">
+                AND u.username LIKE '%${username}%'
+            </if>
+        </where>
+        ORDER BY u.username DESC
+        <if test="rows > 0">
+            LIMIT #{page}, #{rows}
+        </if>
+    </select>
+
+    <select id="querySysUserListCount" parameterType="SysUser" resultType="int">
+        SELECT COUNT(0)
+        FROM sys_user u
+        <where>
+            <if test="username != null and username != '' ">
+                AND u.username LIKE '%$(username)%'
+            </if>
+        </where>
+    </select>
+<!--修改密码功能-->
+    <select id="getByUserId" parameterType="String" resultType="SysUser">
+        SELECT
+            u.user_id AS userId,
+            u.username,
+            u.password,
+            u.salt,
+            u.status,
+            u.company_id AS companyId
+        FROM sys_user u
+        WHERE u.user_id = #{user_id}
+    </select>
+
+    <update id="updatePassword" parameterType="SysUser">
+		UPDATE sys_user SET password = #{password}
+		WHERE  user_Id= #{userId}
+	</update>
+
+<!--编辑功能-->
+    <select id="selectByUserId" parameterType="String" resultType="SysUser">
+        SELECT
+            u.user_id AS userId,
+            u.username,
+            u.password,
+            u.status,
+            u.salt,
+            ur.role_id AS roleId,
+            r.role_name AS roleName,
+            u.company_id AS companyId
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
+        LEFT JOIN sys_role r ON r.role_id = ur.role_id
+        WHERE u.user_id = #{userId}
+    </select>
+
+    <update id="updateUserByUserId" parameterType="SysUser">
+        UPDATE sys_user u
+        JOIN sys_user_role ur
+        ON  u.user_id=ur.user_id
+        SET u.username = #{username},
+            u.password = #{password},
+            ur.role_id = #{roleId},
+            u.company_id = #{companyId}
+        WHERE u.user_id = #{userId}
+
+    </update>
+
+    <insert id="addUser" parameterType="SysUser">
+        INSERT INTO  sys_user  (user_id,
+							  username,
+							  password,
+							  status,
+							  salt,
+							  create_date,
+							  company_id
+					 ) VALUE (#{userId},
+							  #{username},
+							  #{password},
+							  1,
+							  #{salt},
+							  CURRENT_TIMESTAMP,
+							  #{companyId}
+					 )
+    </insert>
+    <insert id="addUserRole" parameterType="SysUser">
+        INSERT INTO  sys_user_role (
+                                      user_id,
+                                      role_id
+                                    ) VALUE (#{userId},
+                                             #{roleId}
+                                    )
+
+    </insert>
+
+    <update id="updateStatusByUserId" parameterType="SysUser">
+        UPDATE sys_user u
+        SET u.status = #{status}
+        WHERE u.user_id = #{userId}
+    </update>
+
+    <select id="selectByUsername" parameterType="String" resultType="SysUser">
+        SELECT
+        u.user_id AS userId,
+        u.username,
+        u.password,
+        u.status,
+        u.salt,
+        ur.role_id AS roleId,
+        r.role_name AS roleName,
+        u.company_id AS companyId
+        FROM sys_user u
+        LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
+        LEFT JOIN sys_role r ON r.role_id = ur.role_id
+        WHERE u.username = #{username}
+    </select>
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.pandabus.web.dao.DiseaseTypeDao">
+
+	<select id="queryDiseaseTypeList" resultType="DiseaseType">
+		SELECT
+				b.id,
+				b.disease_type AS diseaseType,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate,
+				b.creater,
+				DATE_FORMAT(b.update_date, '%Y-%m-%d') AS updateDate,
+				b.updater,
+				b.is_deleted AS isDeleted
+		FROM disease_type b
+        <where>
+        	<if test="diseaseType != null and diseaseType != ''">
+            	AND b.disease_type LIKE '%' #{diseaseType} '%'
+        	</if>
+					<if test="isDeleted != null">
+						AND b.is_deleted = #{isDeleted}
+					</if>
+        </where>
+        ORDER BY b.create_date DESC
+        <if test="rows > 0">
+          	LIMIT #{page}, #{rows}
+        </if>
+	</select>
+	
+	<select id="queryDiseaseTypeListCount" parameterType="DiseaseType" resultType="int">
+		SELECT
+			COUNT(0)
+        FROM disease_type b
+					<where>
+						<if test="diseaseType != null and diseaseType != ''">
+							AND b.disease_type LIKE '%' #{diseaseType} '%'
+						</if>
+						<if test="isDeleted != null">
+							AND b.is_deleted = #{isDeleted}
+						</if>
+					</where>
+	</select>
+	
+	<insert id="add" parameterType="DiseaseType">
+		INSERT INTO disease_type (`disease_type`,
+							  create_date,
+							  creater,
+							  is_deleted
+					 ) VALUE (#{diseaseType},
+							  CURRENT_TIMESTAMP,
+							  #{creater},
+							  0
+					 )
+	</insert>
+	
+	<update id="update" parameterType="DiseaseType">
+		UPDATE disease_type SET disease_type = #{diseaseType},
+							update_date = CURRENT_TIMESTAMP,
+							updater = #{updater}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryById" parameterType="long" resultType="DiseaseType">
+		SELECT b.disease_type AS diseaseType,
+				b.is_deleted AS isDeleted
+		FROM disease_type b
+		WHERE id = #{id}
+	</select>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM disease_type
+		WHERE id = #{id}
+	</delete>
+
+	<update id="updateStatus">
+        UPDATE disease_type
+        SET is_deleted = #{status}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

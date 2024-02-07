@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>dashboard</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}"
+          href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <style type="text/css">
+        .table_center{
+            vertical-align: middle!important;
+        }
+        .contentBlock {
+            border-top:none;
+            border-bottom-style: none !important;
+        }
+        .ibox-title {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #ffffff;
+            border-color: rgba(231, 234, 236, 0.91);
+            border-image: none;
+            border-style: solid solid none;
+            border-width: 2px;
+            color: inherit;
+            margin-bottom: 0;
+            padding: 14px 15px 7px;
+            min-height: 48px;
+        }
+        .ibox-title-radius {
+            border-radius: 15px 15px 0px 0px;
+        }
+        .ibox-content-radius {
+            border-radius: 0px 0px 15px 15px;
+            border-bottom-style: solid;
+            border-width: 2px;
+        }
+        .ibox-content {
+            background-color: #ffffff;
+            color: inherit;
+            padding: 20px 15px 15px 15px;
+            border-color: #e7eaec;
+            border-image: none;
+            /*border-style: solid solid none;*/
+            border-width: 1px 0;
+        }
+        .ibox-content-noTopPadding {
+            padding-top: 0px;
+            border-top-style: none;
+        }
+        .ibox-title h5 {
+            display: inline-block;
+            font-size: 14px;
+            margin: 5px 0 7px;
+            padding: 0;
+            text-overflow: ellipsis;
+            float: left;
+            font-weight: 100;
+            color: #666;
+        }
+        .titleh5 {
+            float: initial !important;
+        }
+        .contentNum, .contentNum2 {
+            font-size: 18px;
+            float: left;
+            width: 48%;
+        }
+        .contentNum {
+            width: 100%;
+            line-height: 55px;
+            color: #636363;
+        }
+        .contentNumDetailed {
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 5px;
+            height: 70px;
+        }
+        .numberCounts {
+            font-size: 24px;
+            color: #32b391;
+        }
+
+        .search {
+            width: 60px;
+            height: 35px;
+            border: none;
+            background: #1cbc9e;
+            color: #fff;
+            float: right;
+            cursor: pointer;
+        }
+        #diseaseType {
+            height: 35px;
+            width: calc(100% - 60px);
+            float: left;
+        }
+        #page-wrapper {
+            position: inherit;
+            margin: 0 0 0 0px;
+            min-height: 100vh;
+            padding: 0 0;
+        }
+        .wrapper-content {
+            padding: 20px 0 40px;
+        }
+        .form-control {
+            background-color: #FFFFFF;
+            background-image: none;
+            border: 1px solid #e5e6e7;
+            border-radius: 1px;
+            color: inherit;
+            display: block;
+            padding: 4px 12px;
+            transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<!--<script th:src="@{/https://cdn.bootcss.com/twitter-bootstrap/3.3.6/js/bootstrap.min.js}"></script>-->
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+
+<!-- Chosen -->
+<script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+
+<!-- Select2 -->
+<script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.bootstrap4.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.reload.js}"></script>
+
+<!-- Data picker -->
+<script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+
+<script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+<script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+<script src="../js/dashboard/index.js"></script>
+
+<shiro:hasPermission name="diseaseType:update">
+    <script type="text/javascript">
+        function editShow(){
+            $('.edit').css('display','' );
+        }
+    </script>
+</shiro:hasPermission>
+
+<shiro:hasPermission name="diseaseType:delete">
+    <script type="text/javascript">
+        function deleteShow(){
+            $('.delete').css('display','');
+        }
+    </script>
+</shiro:hasPermission>
+<div id="wrapper">
+    <!-- include menus.html -->
+<!--    <div th:replace="menus::common"></div>-->
+
+    <div id="page-wrapper" class="gray-bg">
+
+        <!-- include head.html -->
+        <!--            <div th:replace="head::head"></div>-->
+        <div th:replace="navi::navi"></div>
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="ibox-content m-b-sm border-bottom">
+                <div class="row">
+                <div class="col-md-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title ibox-title-radius" style="min-height:0; padding-bottom: 2px;">
+                            <h5 class="titleh5">
+                                <strong>总被试人数</strong>
+                            </h5>
+                        </div>
+                        <div class="ibox-content ibox-content-noTopPadding ibox-content-radius" style="height: 90px;border-width: 2px;">
+                            <div class="borderLine">
+                                <div class="contentNum" style="width: 100%;line-height: 55px;">
+                                    <div class="contentNumDetailed">
+                                        <span class="numberCounts" id="number1"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title ibox-title-radius" style="min-height:0; padding-bottom: 2px;">
+                            <h5 class="titleh5">
+                                <strong>EEG记录条数</strong>
+                            </h5>
+                        </div>
+                        <div class="ibox-content ibox-content-noTopPadding ibox-content-radius" style="height: 90px;border-width: 2px;">
+                            <div class="borderLine">
+                                <div class="contentNum" style="width: 100%;line-height: 55px;">
+                                    <div class="contentNumDetailed">
+                                        <span class="numberCounts" id="number2"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title ibox-title-radius" style="min-height:0; padding-bottom: 2px;">
+                            <h5 class="titleh5">
+                                <strong>TMS-EGG记录条数</strong>
+                            </h5>
+                        </div>
+                        <div class="ibox-content ibox-content-noTopPadding ibox-content-radius" style="height: 90px;border-width: 2px;">
+                            <div class="borderLine">
+                                <div class="contentNum" style="width: 100%;line-height: 55px;">
+                                    <div class="contentNumDetailed">
+                                        <span class="numberCounts" id="number3"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title ibox-title-radius" style="min-height:0; padding-bottom: 2px;">
+                            <h5 class="titleh5">
+                                <strong>rTMS记录条数</strong>
+                            </h5>
+                        </div>
+                        <div class="ibox-content ibox-content-noTopPadding ibox-content-radius" style="height: 90px;border-width: 2px;">
+                            <div class="borderLine">
+                                <div class="contentNum" style="width: 100%;line-height: 55px;">
+                                    <div class="contentNumDetailed">
+                                        <span class="numberCounts" id="number4"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="eCharts1" style="height: 400px;"></div>
+                </div>
+                <div class="col-md-12">
+                    <div id="eCharts2" style="height: 400px;"></div>
+                </div>
+                <div class="col-md-12">
+                    <div id="eCharts3" style="height: 400px;"></div>
+                </div>
+                <div class="col-md-12">
+                    <div id="eCharts4" style="height: 400px;"></div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <!-- include foot.html -->
+<!--        <div th:replace="foot::foot"></div>-->
+    </div>
+</div>
+</body>
+</html>

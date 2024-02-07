@@ -1,0 +1,17 @@
+version: '2'
+
+
+services:
+  eegnet:
+    container_name: eegnet 
+    image: projectappia/eegnet:latest 
+    build: 
+      context: ./Docker/
+      dockerfile: /Dockerfile 
+    ports:
+     - "6006:6006"
+     - "8888:8888"
+    volumes:
+     - ./:/content
+
+

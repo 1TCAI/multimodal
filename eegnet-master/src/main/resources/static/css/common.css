@@ -1,0 +1,93 @@
+.wrapper .ibox-content .row .col-sm-2 {
+    -ms-flex: 0 0 16.666667%;
+    flex: 0 0 16.666667%;
+    max-width: 10.666667%;
+    min-width: 180px;
+}
+
+#page-wrapper {
+    position: inherit;
+    margin: 0 0 0 0px;
+    min-height: 100vh;
+    padding: 0 0;
+}
+
+.wrapper-content {
+    padding: 20px 0 40px;
+}
+
+.form-control {
+    background-color: #FFFFFF;
+    background-image: none;
+    border: 1px solid #e5e6e7;
+    border-radius: 1px;
+    color: inherit;
+    display: block;
+    padding: 4px 12px;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+    width: 100%;
+}
+
+.inmodal .modal-header {
+    padding: 10px 15px;
+    text-align: center;
+    display: block;
+}
+
+.inmodal .modal-title {
+    font-size: 20px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+.chosen-container-single .chosen-single {
+    background: #ffffff;
+    box-shadow: none;
+    -moz-box-sizing: border-box;
+    border-radius: 2px;
+    cursor: text;
+    height: auto !important;
+    margin: 0;
+    min-height: 25px;
+    overflow: hidden;
+    padding: 3px 12px;
+    position: relative;
+    width: 100%;
+}
+th, td {
+    white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.dataTables_wrapper {
+    width: 100%;
+    min-width: 800px;
+    margin: 0 auto;
+}
+/*分页靠左*/
+div.dataTables_wrapper div.dataTables_paginate {
+    margin: 0;
+    float: left;
+    white-space: nowrap;
+    text-align: right;
+}
+
+div.dataTables_wrapper div.dataTables_length label {
+    font-weight: normal;
+    text-align: left;
+    white-space: nowrap;
+    margin: 10px 0 0 10px;
+}
+div.dataTables_wrapper div.dataTables_paginate {
+    float: left;
+    white-space: nowrap;
+    text-align: right;
+    margin: 10px 0 0 0;
+}

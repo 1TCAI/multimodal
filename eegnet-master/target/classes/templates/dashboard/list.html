@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title></title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}"
+          href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <style type="text/css">
+        .table_center{
+            vertical-align: middle!important;
+        }
+        .listNumber {
+            font-size: 1rem;
+        }
+        .listNumber span {
+            color: #1ab394;
+        }
+        .getTime {
+            margin: 0.6rem 0;
+        }
+        .listTitle {
+            color: #3b85bf;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .listAddress {
+            color: #007228;
+        }
+        .listBox {
+            padding: 15px 0;
+            border-top: 1px dashed #ddd;
+            cursor: pointer;
+        }
+        .listContent {
+            margin-top: 10px;
+        }
+        .listDetailed {
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+        .pageContent {
+            text-align: center;
+        }
+        .pageUl li {
+            float: left;
+            width: 22px;
+            height:22px;
+            line-height: 20px;
+            text-align: center;
+            list-style: none;
+            border:1px solid #ddd;
+            border-left:none;
+            cursor: pointer;
+        }
+        .pageUl li:nth-of-type(1) {
+            border-left:1px solid #ddd;
+        }
+        .pageContent {
+            border-top:1px dashed #ddd;
+            padding-top:15px;
+        }
+        .pageActive {
+            box-shadow: 0px 0px 5px #ddd inset;
+        }
+        .ellipsis {
+            /*border:none;*/
+            /*border-right:1px solid #ddd;*/
+        }
+        .search {
+            width: 60px;
+            height: 35px;
+            border: none;
+            background: #1cbc9e;
+            color: #fff;
+            float: right;
+            cursor: pointer;
+        }
+        #diseaseType {
+            height: 35px;
+            width: calc(100% - 60px);
+            float: left;
+        }
+        #page-wrapper {
+            position: inherit;
+            margin: 0 0 0 0px;
+            min-height: 100vh;
+            padding: 0 0;
+        }
+        .wrapper-content {
+            padding: 20px 0 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<!--<script th:src="@{/https://cdn.bootcss.com/twitter-bootstrap/3.3.6/js/bootstrap.min.js}"></script>-->
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+
+<!-- Chosen -->
+<script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+
+<!-- Select2 -->
+<script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.bootstrap4.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.reload.js}"></script>
+
+<!-- Data picker -->
+<script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+<script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+<script src="../../js/dashboard/list.js"></script>
+
+<shiro:hasPermission name="diseaseType:update">
+    <script type="text/javascript">
+        function editShow(){
+            $('.edit').css('display','' );
+        }
+    </script>
+</shiro:hasPermission>
+
+<shiro:hasPermission name="diseaseType:delete">
+    <script type="text/javascript">
+        function deleteShow(){
+            $('.delete').css('display','');
+        }
+    </script>
+</shiro:hasPermission>
+<div id="wrapper">
+    <!-- include menus.html -->
+<!--    <div th:replace="menus::common"></div>-->
+    <div id="page-wrapper" class="gray-bg">
+        <!-- include head.html -->
+<!--        <div th:replace="head::head"></div>-->
+        <div th:replace="navi::navi"></div>
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+            <div class="ibox-content m-b-sm border-bottom">
+                <form onsubmit="return false;" role="form" style="padding: 0px">
+                    <div class="row">
+                        <div class="col-md-12 listNumber">
+                            <span id="listCount"></span>个搜索结果:<span id="searchText"></span>
+                        </div>
+                        <div id="excuseTime" class="col-md-12 getTime">
+                            请求时间(0.23秒)
+                        </div>
+                        <!--<div class="col-sm-4">-->
+                            <!--<div class="form-group">-->
+                                <!--&lt;!&ndash;<label class="col-form-label" for="diseaseType">疾病类型</label>&ndash;&gt;-->
+                                <!--<input type="text" id="diseaseType" class="form-control" placeholder="请输入搜索内容" />-->
+                                <input type="hidden" id="diseaseType_hidden6325" placeholder="单行输入">
+                                <!--<button id="search" class="search"><i class="fa fa-search"></i>搜索</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </form>
+                <div id="listContent" class="listContent">
+
+                </div>
+                <div class="pageContent">
+                    <ul id="pageUl" class="pageUl">
+                        <li class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i></li>
+                        <li class="pageActive pageNum">1</li>
+                        <li class="pageNum">2</li>
+                        <li class="pageNum">3</li>
+                        <li class="pageNum">4</li>
+                        <li class="next"><i class="fa fa-angle-right" aria-hidden="true"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- include foot.html -->
+<!--        <div th:replace="foot::foot"></div>-->
+    </div>
+</div>
+</body>
+</html>

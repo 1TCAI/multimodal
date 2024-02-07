@@ -1,0 +1,120 @@
+<content th:fragment="eeg_dialog">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content">
+                            <form id="mainForm" class="form-horizontal form-update" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label"><span style="color: red;">*</span>门诊号/住院号：</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" id="patientNumber" name="patientNumber">
+                                            <option th:each="patient:${patientList}" th:value="${patient.id}" th:text="${patient.patientNumber}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="pInfo" style="display: none">
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label">姓名：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" disabled="disabled" class="form-control" name="patientName" id="update_patientName">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label">疾病类型：</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" disabled="disabled" id="update_diseaseType" name="diseaseType">
+                                            <option th:each="diseaseType:${diseaseTypeList}" th:value="${diseaseType.id}"
+                                                    th:text="${diseaseType.diseaseType}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label">诊断：</label>
+                                    <div class="col-sm-4">
+                                        <textarea disabled="disabled" rows="3" class="form-control" name="diagnose" id="update_diagnose"></textarea>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label"><span style="color: red;">*</span>EEG记录名称：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="eegRecord" id="eegRecord">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label"><span style="color: red;">*</span>EEG类型：</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" id="eegType" name="eegType">
+                                            <option value="3">3</option>
+                                            <option value="64" selected>64</option>
+                                            <option value="128">128</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label"><span style="color: red;">*</span>采集日期：</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group date" id="div_gatherDate">
+                                            <input readonly style="background: #fff;" type="text" class="input-sm form-control" name="gatherDate"
+                                                   id="gatherDate"/>
+                                            <span class="input-sm input-group-addon">
+													<i class="fa fa-calendar"></i>
+												</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label">有无睡着：</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" id="haveSleep" name="haveSleep">
+                                            <option value="">未知</option>
+                                            <option value="1">有</option>
+                                            <option value="0">无</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label">申请医生：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="applyDoctor" id="applyDoctor">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <label class="col-sm-3 control-label">EEG记录描述：</label>
+                                    <div class="col-sm-4">
+                                        <textarea rows="3" class="form-control" name="eegDetail" id="eegDetail"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-6" style="text-align: center">
+                                        <button type="button" data-style="zoom-in"
+                                                class="btn btn-w-m btn-primary btn-update-footer" id="btn_save">
+                                            保&nbsp;&nbsp;存
+                                        </button>&nbsp;&nbsp;
+                                        <button type="button" class="btn btn-w-m btn-default btn-update-footer"
+                                                id="btn_cancle">
+                                            取&nbsp;&nbsp;消
+                                        </button>
+                                        <div class="col-sm-3"></div>
+                                        <input type="hidden" id="hidden_id"/></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</content>

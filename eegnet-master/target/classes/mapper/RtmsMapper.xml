@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.pandabus.web.dao.RtmsDao">
+
+	<select id="queryRtmsList" resultType="Rtms">
+		SELECT
+				b.id,
+				p.patient_number AS patientNumber,
+		p.hospital_number AS hospitalNumber,
+				p.patient_name AS patientName,
+				dt.disease_type AS diseaseType,
+				p.diagnose,
+		   	b.resting_motion_threshold AS restingMotionThreshold,
+		   	b.stimulus_site AS stimulusSite,
+		   	b.stimulus_intensity AS stimulusIntensity,
+		   	b.stimulus_frequency AS stimulusFrequency,
+		   	b.stimulation_time_series AS stimulationTimeSeries,
+				b.serial_interval_time AS serialIntervalTime,
+				b.total_time AS totalTime,
+				b.pulse_count AS pulseCount,
+				b.pretreatment_evaluation AS pretreatmentEvaluation,
+				b.treatment_count AS treatmentCount,
+				DATE_FORMAT(b.treatment_date, '%Y-%m-%d') AS treatmentDate,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate,
+				b.creater,
+				DATE_FORMAT(b.update_date, '%Y-%m-%d') AS updateDate,
+				b.updater,
+				b.is_deleted AS isDeleted
+		FROM rtms b LEFT JOIN patient_record p ON b.patient_number = p.id
+							LEFT JOIN disease_type dt ON p.disease_type= dt.id
+        <where>
+        	<if test="patientGender != null">
+            	AND p.patient_gender = #{patientGender}
+        	</if>
+        	<if test="diseaseType != null and diseaseType != ''">
+            	AND p.disease_type = #{diseaseType}
+        	</if>
+					<if test="diagnose != null and diagnose != ''">
+						AND p.diagnose LIKE '%' #{diagnose} '%'
+					</if>
+					<if test="treatmentCount != null">
+						AND b.treatment_count = #{treatmentCount}
+					</if>
+					<if test="pretreatmentEvaluation != null and pretreatmentEvaluation != ''">
+						AND b.pretreatment_evaluation LIKE '%' #{pretreatmentEvaluation} '%'
+					</if>
+					<if test="birthday != null and birthday != ''">
+						AND p.birthday = #{birthday}
+					</if>
+					<if test="dimensions != null">
+						AND p.dimensions = #{dimensions}
+					</if>
+					<if test="patientNumber != null and patientNumber != ''">
+						AND (p.patient_number LIKE '%' #{patientNumber} '%' OR p.hospital_number LIKE '%' #{patientNumber} '%')
+					</if>
+					<!--<if test="hospitalNumber != null and hospitalNumber != ''">-->
+						<!--AND p.hospital_number LIKE '%' #{hospitalNumber} '%'-->
+					<!--</if>-->
+					<if test="isDeleted != null">
+						AND b.is_deleted = #{isDeleted}
+					</if>
+        </where>
+        ORDER BY b.create_date DESC
+        <if test="rows > 0">
+          	LIMIT #{page}, #{rows}
+        </if>
+	</select>
+	
+	<select id="queryRtmsListCount" parameterType="Rtms" resultType="int">
+		SELECT
+			COUNT(0)
+        FROM rtms b LEFT JOIN patient_record p ON b.patient_number = p.id
+					<where>
+						<if test="patientGender != null">
+							AND p.patient_gender = #{patientGender}
+						</if>
+						<if test="diseaseType != null and diseaseType != ''">
+							AND p.disease_type = #{diseaseType}
+						</if>
+						<if test="diagnose != null and diagnose != ''">
+							AND p.diagnose LIKE '%' #{diagnose} '%'
+						</if>
+						<if test="treatmentCount != null">
+							AND b.treatment_count = #{treatmentCount}
+						</if>
+						<if test="pretreatmentEvaluation != null and pretreatmentEvaluation != ''">
+							AND b.pretreatment_evaluation LIKE '%' #{pretreatmentEvaluation} '%'
+						</if>
+						<if test="birthday != null and birthday != ''">
+							AND p.birthday = #{birthday}
+						</if>
+						<if test="dimensions != null">
+							AND p.dimensions = #{dimensions}
+						</if>
+						<if test="patientNumber != null and patientNumber != ''">
+							AND (p.patient_number LIKE '%' #{patientNumber} '%' OR p.hospital_number LIKE '%' #{patientNumber} '%')
+						</if>
+						<!--<if test="hospitalNumber != null and hospitalNumber != ''">-->
+							<!--AND p.hospital_number LIKE '%' #{hospitalNumber} '%'-->
+						<!--</if>-->
+						<if test="isDeleted != null">
+							AND b.is_deleted = #{isDeleted}
+						</if>
+					</where>
+	</select>
+	
+	<insert id="add" parameterType="Rtms">
+		INSERT INTO rtms (`patient_number`,
+							  resting_motion_threshold,
+							  stimulus_site,
+							  stimulus_intensity,
+							  stimulus_frequency,
+							  stimulation_time_series,
+							  serial_interval_time,
+							  total_time,
+							  pulse_count,
+							  pretreatment_evaluation,
+							  treatment_count,
+							  treatment_date,
+							  create_date,
+							  creater,
+							  is_deleted
+					 ) VALUE (#{patientNumber},
+							  #{restingMotionThreshold},
+							  #{stimulusSite},
+							  #{stimulusIntensity},
+							  #{stimulusFrequency},
+							  #{stimulationTimeSeries},
+							  #{serialIntervalTime},
+							  #{totalTime},
+							  #{pulseCount},
+							  #{pretreatmentEvaluation},
+							  #{treatmentCount},
+							  #{treatmentDate},
+							  CURRENT_TIMESTAMP,
+							  #{creater},
+							  0
+					 )
+	</insert>
+	
+	<update id="update" parameterType="Rtms">
+		UPDATE rtms SET patient_number = #{patientNumber},
+							resting_motion_threshold = #{restingMotionThreshold},
+							stimulus_site = #{stimulusSite},
+							stimulus_intensity = #{stimulusIntensity},
+							stimulus_frequency = #{stimulusFrequency},
+							stimulation_time_series = #{stimulationTimeSeries},
+							serial_interval_time = #{serialIntervalTime},
+							total_time = #{totalTime},
+							pulse_count = #{pulseCount},
+							pretreatment_evaluation = #{pretreatmentEvaluation},
+							treatment_count = #{treatmentCount},
+							treatment_date = #{treatmentDate},
+							update_date = CURRENT_TIMESTAMP,
+							updater = #{updater}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryById" parameterType="long" resultType="Rtms">
+		SELECT b.patient_number AS patientNumber,
+		   	b.resting_motion_threshold AS restingMotionThreshold,
+		   	b.stimulus_site AS stimulusSite,
+		   	b.stimulus_intensity AS stimulusIntensity,
+		   	b.stimulus_frequency AS stimulusFrequency,
+		   	b.stimulation_time_series AS stimulationTimeSeries,
+				b.serial_interval_time AS serialIntervalTime,
+				b.total_time AS totalTime,
+				b.pulse_count AS pulseCount,
+				b.pretreatment_evaluation AS pretreatmentEvaluation,
+				b.treatment_count AS treatmentCount,
+				DATE_FORMAT(b.treatment_date, '%Y-%m-%d') AS treatmentDate,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate,
+				b.creater,
+				DATE_FORMAT(b.update_date, '%Y-%m-%d') AS updateDate,
+				b.updater,
+				b.is_deleted AS isDeleted
+		FROM rtms b
+		WHERE id = #{id}
+	</select>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM rtms
+		WHERE id = #{id}
+	</delete>
+
+	<select id="queryAllCount" parameterType="String" resultType="int">
+		SELECT
+		COUNT(0) AS cnt
+		FROM rtms
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND pretreatment_evaluation LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="getCountByDate" resultType="int">
+		SELECT COUNT(0) AS cnt
+		FROM rtms
+		WHERE DATE_FORMAT(create_date, '%Y-%m-%d') <![CDATA[<]]> #{startDate}
+	</select>
+
+	<select id="getChartData" resultType="Map">
+		SELECT
+		COUNT(0) AS cnt,
+		DATE_FORMAT(create_date, '%Y-%m-%d') AS createDate
+		FROM rtms
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND pretreatment_evaluation LIKE '%' #{keyset} '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(create_date, '%Y-%m-%d') >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(create_date, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
+			</if>
+		</where>
+		GROUP BY createDate
+	</select>
+
+	<update id="updateStatus">
+        UPDATE rtms
+        SET is_deleted = #{status}
+        WHERE id = #{id}
+    </update>
+
+	<select id="queryRtmsListByPatientNumber" resultType="Map">
+		SELECT
+				b.id,
+		   	b.resting_motion_threshold AS restingMotionThreshold,
+		   	b.stimulus_site AS stimulusSite,
+		   	b.stimulus_intensity AS stimulusIntensity,
+		   	b.stimulus_frequency AS stimulusFrequency,
+		   	b.stimulation_time_series AS stimulationTimeSeries,
+				b.serial_interval_time AS serialIntervalTime,
+				b.total_time AS totalTime,
+				b.pulse_count AS pulseCount,
+				b.pretreatment_evaluation AS pretreatmentEvaluation,
+				b.treatment_count AS treatmentCount,
+				DATE_FORMAT(b.treatment_date, '%Y-%m-%d') AS treatmentDate
+		FROM rtms b
+		WHERE patient_number = #{patientNumber}
+	</select>
+</mapper>

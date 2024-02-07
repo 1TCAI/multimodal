@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>资源管理</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}" href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <style type="text/css">
+        #page-wrapper {
+            position: inherit;
+            margin: 0 0 0 0px;
+            min-height: 100vh;
+            padding: 0 0;
+        }
+        .wrapper-content {
+            padding: 20px 0 40px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<script th:src="@{/inspinia/js/plugins/validate/jquery.validate.min.js}"></script>
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/inspinia/js/jquery.form.js}"></script>
+<!-- Chosen -->
+<script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+<script th:src="@{/js/jquery.validate.js}"></script>
+<script src="../../js/system/resource/update.js"></script>
+<div id="wrapper"  >
+
+    <!-- include menus.html -->
+<!--    <div th:replace="menus::common"></div>-->
+
+    <div id="page-wrapper" class="gray-bg" >
+
+        <!-- include head.html -->
+<!--        <div th:replace="head::head"></div>-->
+        <div th:replace="navi::navi"></div>
+        <div class="wrapper wrapper-content animated fadeInRight" style="position: relative;z-index: 1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5 ></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <form id="mainForm" class="form-horizontal form-update">
+                                <div class="form-group row">
+                                    <input type="hidden" name="id" id="text_id">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>类型</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" id="text_menuType" name="menuType" onchange="changeType()">
+                                            <option value="M" >菜单</option>
+                                            <option value="C" >按钮</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="div_parentId">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>母菜单：</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" id="text_parentId"  name="parentId">
+                                            <option value="0">无</option>
+                                            <option th:each="parent:${parentsList}" th:value="${parent.menuId}" th:text="${parent.menuName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="div_parentId1">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>母菜单：</label>
+                                    <div class="col-sm-4">
+                                        <select class="chosen-select" id="text_parentId1"  name="parentId1">
+                                            <option th:each="page:${pagesList}" th:value="${page.menuId}" th:text="${page.menuName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>菜单名：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="menuName" id="text_menuName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>url：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="url" id="text_url" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label"><span style="color: red;">*</span>排序：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="sequence" id="text_sequence" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">图标：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="icon" id="text_icon">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label">权限：</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" name="perms" id="text_perms" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-2"></div>
+                                    <div class="col-sm-4" style="text-align: center">
+                                        <button type="button" data-style="zoom-in"
+                                                class="ladda-button btn btn-w-m btn-primary btn-update-footer"
+                                                id="btn_save">
+                                            保&nbsp;&nbsp;存
+                                        </button>&nbsp;&nbsp;
+                                        <button type="button" class="btn btn-w-m btn-default btn-update-footer"
+                                                id="btn_cancle">
+                                            取&nbsp;&nbsp;消
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="hidden_id"/>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- include foot.html -->
+        <div th:replace="foot::foot" style="position: relative;z-index: 0"></div>
+    </div>
+
+</div>
+</body>
+
+</html>

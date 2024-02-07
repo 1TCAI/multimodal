@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.pandabus.web.dao.SysLogDao">
+
+	<insert id="save" parameterType="SysLog">
+		INSERT INTO sys_log (
+			user_id,
+			user_name,
+			action_name,
+			action_type,
+			params,
+			client_ip,
+			create_date
+		) VALUE (
+			#{userId},
+			#{userName},
+			#{actionName},
+			#{actionType},
+			#{params},
+			#{clientIp},
+			CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<select id="querySysLogList"  resultType="SysLog">
+		SELECT
+			id,
+			user_name AS userName,
+			action_name AS actionName,
+			params,
+			client_ip AS clientIp,
+			DATE_FORMAT(create_date, '%Y-%m-%d %H:%i:%s') AS createDate
+		FROM sys_log
+		<where>
+			<if test="userName != null and userName != ''">
+				AND user_name = #{userName}
+			</if>
+			<if test="startDate != '' and startDate != null">
+				AND create_date <![CDATA[>=]]> #{startDate}
+			</if>
+			<if test="endDate != '' and endDate != null">
+				AND create_date <![CDATA[<=]]> #{endDate}
+			</if>
+		</where>
+		ORDER BY create_date DESC
+		<if test="rows > 0">
+			LIMIT #{page}, #{rows}
+		</if>
+	</select>
+	
+	<select id="querySysLogListCount" resultType="int">
+		SELECT COUNT(0)
+        FROM sys_log
+		<where>
+			<if test="userName != null and userName != ''">
+				AND user_name = #{userName}
+			</if>
+			<if test="startDate != '' and startDate != null">
+				AND create_date <![CDATA[>=]]> #{startDate}
+			</if>
+			<if test="endDate != '' and endDate != null">
+				AND create_date <![CDATA[<=]]> #{endDate}
+			</if>
+		</where>
+	</select>
+
+</mapper>

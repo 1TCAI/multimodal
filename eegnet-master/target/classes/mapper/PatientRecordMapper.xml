@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.pandabus.web.dao.PatientRecordDao">
+
+	<select id="queryPatientRecordList" resultType="PatientRecord">
+		SELECT
+				b.id,
+				b.patient_number AS patientNumber,
+		   	b.patient_name AS patientName,
+		   	b.patient_gender AS patientGender,
+		   	b.patient_age AS patientAge,
+		   	b.birthday,
+		   	b.education,
+		   	b.phone,
+		   	b.from,
+		   	b.bed_number AS bedNumber,
+				dt.disease_type AS diseaseType,
+		   	b.diagnose,
+				b.out_diagnose AS outDiagnose,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate,
+				b.creater,
+				DATE_FORMAT(b.update_date, '%Y-%m-%d') AS updateDate,
+				b.updater,
+				b.is_deleted AS isDeleted,
+				b.hospital_number AS hospitalNumber,
+				b.dimensions
+		FROM patient_record b LEFT JOIN disease_type dt ON b.disease_type= dt.id
+        <where>
+        	<if test="patientGender != null">
+            	AND b.patient_gender = #{patientGender}
+        	</if>
+        	<if test="diseaseType != null and diseaseType != ''">
+            	AND b.disease_type = #{diseaseType}
+        	</if>
+					<if test="diagnose != null and diagnose != ''">
+						AND b.diagnose LIKE '%' #{diagnose} '%'
+					</if>
+					<if test="birthday != null and birthday != ''">
+						AND b.birthday = #{birthday}
+					</if>
+					<if test="dimensions != null">
+						AND b.dimensions = #{dimensions}
+					</if>
+					<if test="patientNumber != null and patientNumber != ''">
+						AND (b.patient_number LIKE '%' #{patientNumber} '%' OR b.hospital_number LIKE '%' #{patientNumber} '%')
+					</if>
+					<!--<if test="hospitalNumber != null and hospitalNumber != ''">-->
+						<!--AND b.hospital_number LIKE '%' #{hospitalNumber} '%'-->
+					<!--</if>-->
+					<if test="isDeleted != null">
+						AND b.is_deleted = #{isDeleted}
+					</if>
+        </where>
+        ORDER BY b.create_date DESC
+        <if test="rows > 0">
+          	LIMIT #{page}, #{rows}
+        </if>
+	</select>
+
+	<select id="queryPatientRecordListCount" parameterType="PatientRecord" resultType="int">
+		SELECT
+			COUNT(0)
+        FROM patient_record b
+					<where>
+						<if test="patientGender != null">
+							AND b.patient_gender = #{patientGender}
+						</if>
+						<if test="diseaseType != null and diseaseType != ''">
+							AND b.disease_type = #{diseaseType}
+						</if>
+						<if test="diagnose != null and diagnose != ''">
+							AND b.diagnose LIKE '%' #{diagnose} '%'
+						</if>
+						<if test="birthday != null and birthday != ''">
+							AND b.birthday = #{birthday}
+						</if>
+						<if test="dimensions != null">
+						AND b.dimensions = #{dimensions}
+						</if>
+						<if test="patientNumber != null and patientNumber != ''">
+							AND (b.patient_number LIKE '%' #{patientNumber} '%' OR b.hospital_number LIKE '%' #{patientNumber} '%')
+						</if>
+						<!--<if test="hospitalNumber != null and hospitalNumber != ''">-->
+							<!--AND b.hospital_number LIKE '%' #{hospitalNumber} '%'-->
+						<!--</if>-->
+						<if test="isDeleted != null">
+							AND b.is_deleted = #{isDeleted}
+						</if>
+					</where>
+	</select>
+
+	<insert id="add" parameterType="PatientRecord">
+		INSERT INTO patient_record (`patient_number`,
+							  patient_name,
+							  patient_gender,
+							  patient_age,
+							  education,
+							  phone,
+							  `from`,
+							  bed_number,
+							  disease_type,
+							  diagnose,
+							  out_diagnose,
+							  create_date,
+							  creater,
+							  is_deleted,
+							  birthday,
+							  hospital_number,
+							  dimensions
+					 ) VALUE (#{patientNumber},
+							  #{patientName},
+							  #{patientGender},
+							  #{patientAge},
+							  #{education},
+							  #{phone},
+							  #{from},
+							  #{bedNumber},
+							  #{diseaseType},
+							  #{diagnose},
+							  #{outDiagnose},
+							  CURRENT_TIMESTAMP,
+							  #{creater},
+							  0,
+							  #{birthday},
+							  #{hospitalNumber},
+							  #{dimensions}
+					 )
+	</insert>
+
+	<update id="update" parameterType="PatientRecord">
+		UPDATE patient_record SET patient_number = #{patientNumber},
+							patient_name = #{patientName},
+							patient_gender = #{patientGender},
+							patient_age = #{patientAge},
+							education = #{education},
+							phone = #{phone},
+							`from` = #{from},
+							bed_number = #{bedNumber},
+							disease_type = #{diseaseType},
+							diagnose = #{diagnose},
+							out_diagnose = #{outDiagnose},
+							update_date = CURRENT_TIMESTAMP,
+							updater = #{updater},
+							birthday = #{birthday},
+							hospital_number = #{hospitalNumber},
+							dimensions = #{dimensions}
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryById" parameterType="long" resultType="PatientRecord">
+		SELECT b.patient_number AS patientNumber,
+		   	b.patient_name AS patientName,
+		   	b.patient_gender AS patientGender,
+		   	b.patient_age AS patientAge,
+		   	b.birthday,
+		   	b.education,
+		   	b.phone,
+		   	b.from,
+		   	b.bed_number AS bedNumber,
+		   	b.disease_type AS diseaseType,
+		   	b.diagnose,
+				b.out_diagnose AS outDiagnose,
+				b.is_deleted AS isDeleted,
+				b.hospital_number AS hospitalNumber,
+				b.dimensions
+		FROM patient_record b
+		WHERE id = #{id}
+	</select>
+
+	<delete id="delete" parameterType="long">
+		DELETE FROM patient_record
+		WHERE id = #{id}
+	</delete>
+
+	<select id="queryAllCount" parameterType="String" resultType="int">
+		SELECT
+		COUNT(0) AS cnt
+		FROM patient_record
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND diagnose LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+	</select>
+
+	<select id="getChartData" resultType="Map">
+		SELECT
+		COUNT(0) AS cnt,
+		DATE_FORMAT(create_date, '%Y-%m-%d') AS createDate
+		FROM patient_record
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND diagnose LIKE '%' #{keyset} '%'
+			</if>
+			<if test="startDate != null and startDate != ''">
+				AND DATE_FORMAT(create_date, '%Y-%m-%d') >= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND DATE_FORMAT(create_date, '%Y-%m-%d') <![CDATA[<=]]> #{endDate}
+			</if>
+		</where>
+		GROUP BY createDate
+	</select>
+
+	<select id="getAllData" resultType="Map">
+	SELECT * FROM (
+		SELECT
+		pr.id,
+		pr.patient_name AS patientName,
+		pr.patient_number AS patientNumber,
+		CONCAT(
+		IFNULL(IF(pr.diagnose = '' or pr.diagnose = null, '', CONCAT('诊断:', pr.diagnose, ';\n')), ''),
+		IFNULL(IF(e.eeg_detail = null or e.eeg_detail = '', '', CONCAT('EEG记录描述:', e.eeg_detail,
+		';\n')), ''),
+		IFNULL(IF(r.pretreatment_evaluation = null or r.pretreatment_evaluation = '', '',
+		CONCAT('治疗前评估:', r.pretreatment_evaluation, ';\n')), ''),
+		IFNULL(IF(te.eeg_detail = null or te.eeg_detail ='', '', CONCAT('TMS-EEG记录描述:', te.eeg_detail,
+		';\n')), '')) AS detail
+		FROM patient_record pr LEFT JOIN
+		(SELECT patient_number,
+		eeg_detail
+		FROM eeg
+		<where>
+		<if test="keyset != null and keyset != ''">
+			AND eeg_detail LIKE '%' #{keyset} '%'
+		</if>
+		</where>
+			) e ON pr.id = e.patient_number
+			LEFT JOIN
+		(SELECT patient_number,
+		pretreatment_evaluation
+		FROM rtms
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND pretreatment_evaluation LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+		) r ON pr.id = r.patient_number
+		LEFT JOIN
+		(SELECT patient_number,
+		eeg_detail
+		FROM tms_eeg
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND eeg_detail LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+		) te ON pr.id = te.patient_number
+		) t
+		WHERE detail is not null
+			<if test="keyset != null and keyset != ''">
+				AND detail LIKE '%' #{keyset} '%'
+			</if>
+		<if test="rows > 0">
+			LIMIT #{page}, #{rows}
+		</if>
+	</select>
+
+	<select id="getAllDataCount" resultType="int">
+		SELECT COUNT(0) FROM (
+		SELECT
+		pr.id,
+		pr.patient_name AS patientName,
+		pr.patient_number AS patientNumber,
+		CONCAT(
+		IFNULL(IF(pr.diagnose = '' or pr.diagnose = null, '', CONCAT('诊断:', pr.diagnose, ';\n')), ''),
+		IFNULL(IF(e.eeg_detail = null or e.eeg_detail = '', '', CONCAT('EEG记录描述:', e.eeg_detail,
+		';\n')), ''),
+		IFNULL(IF(r.pretreatment_evaluation = null or r.pretreatment_evaluation = '', '',
+		CONCAT('治疗前评估:', r.pretreatment_evaluation, ';\n')), ''),
+		IFNULL(IF(te.eeg_detail = null or te.eeg_detail ='', '', CONCAT('TMS-EEG记录描述:', te.eeg_detail,
+		';\n')), '')) AS detail
+		FROM patient_record pr LEFT JOIN
+		(SELECT patient_number,
+		eeg_detail
+		FROM eeg
+		<where>
+		<if test="keyset != null and keyset != ''">
+			AND eeg_detail LIKE '%' #{keyset} '%'
+		</if>
+		</where>
+			) e ON pr.id = e.patient_number
+			LEFT JOIN
+		(SELECT patient_number,
+		pretreatment_evaluation
+		FROM rtms
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND pretreatment_evaluation LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+		) r ON pr.id = r.patient_number
+		LEFT JOIN
+		(SELECT patient_number,
+		eeg_detail
+		FROM tms_eeg
+		<where>
+			<if test="keyset != null and keyset != ''">
+				AND eeg_detail LIKE '%' #{keyset} '%'
+			</if>
+		</where>
+		) te ON pr.id = te.patient_number
+		) t
+		WHERE detail is not null
+			<if test="keyset != null and keyset != ''">
+				AND detail LIKE '%' #{keyset} '%'
+			</if>
+	</select>
+
+	<update id="updateStatus">
+		UPDATE patient_record
+		SET is_deleted = #{status}
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryByPatientNumberOrHospitalNumber" resultType="PatientRecord">
+		SELECT
+				b.id,
+				b.patient_number AS patientNumber,
+				b.hospital_number AS hospitalNumber
+		FROM patient_record b
+		WHERE patient_number = #{patientNumber}
+		<if test="hospitalNumber != null and hospitalNumber != ''">
+			AND hospital_number = #{hospitalNumber}
+		</if>
+		<if test="patientNumber != null and patientNumber != ''">
+			AND patient_number = #{patientNumber}
+		</if>
+	</select>
+
+	<!--<select id="getDetailByPatientNumber" resultType="PatientDetail">-->
+		<!--SELECT-->
+				<!--b.id,-->
+				<!--b.patient_name AS patientName,-->
+				<!--b.patient_number AS patientNumber,-->
+				<!--b.hospital_number AS hospitalNumber,-->
+				<!--b.birthday,-->
+				<!--b.patient_gender AS patientGender,-->
+				<!--e.eegRecord,-->
+				<!--e.eegDetail,-->
+				<!--e.eegType,-->
+				<!--e.haveSleep,-->
+				<!--e.applyDoctor,-->
+				<!--r.restingMotionThreshold,-->
+		   	<!--r.stimulusSite,-->
+		   	<!--r.stimulusIntensity,-->
+		   	<!--r.stimulusFrequency,-->
+		   	<!--r.stimulationTimeSeries,-->
+				<!--r.serialIntervalTime,-->
+				<!--r.totalTime,-->
+				<!--r.pulseCount,-->
+				<!--r.pretreatmentEvaluation,-->
+				<!--r.treatmentCount,-->
+		    <!--t.eegRecord AS eegRecord_t,-->
+		    <!--t.eegDetail AS eegDetail_t,-->
+		    <!--t.eegType AS eegType_t,-->
+		    <!--t.haveSleep AS haveSleep_t,-->
+		    <!--t.applyDoctor AS applyDoctor_t,-->
+		    <!--t.gatherDate AS gatherDate_t,-->
+		    <!--t.isThreshold,-->
+		    <!--t.threshold,-->
+		    <!--t.stimulusIntensity AS stimulusIntensity_t-->
+		<!--FROM patient_record b LEFT JOIN-->
+		<!--(SELECT patient_number,-->
+		   	<!--eeg_record AS eegRecord,-->
+		   	<!--eeg_detail AS eegDetail,-->
+		   	<!--eeg_type AS eegType,-->
+		   	<!--have_sleep AS haveSleep,-->
+		   	<!--apply_doctor AS applyDoctor-->
+		 <!--FROM eeg-->
+		 <!--WHERE patient_number = #{patientNumber} LIMIT 1) e ON b.id = e.patient_number LEFT JOIN-->
+		<!--(SELECT resting_motion_threshold AS restingMotionThreshold,-->
+		   	<!--stimulus_site AS stimulusSite,-->
+		   	<!--stimulus_intensity AS stimulusIntensity,-->
+		   	<!--stimulus_frequency AS stimulusFrequency,-->
+		   	<!--stimulation_time_series AS stimulationTimeSeries,-->
+				<!--serial_interval_time AS serialIntervalTime,-->
+				<!--total_time AS totalTime,-->
+				<!--pulse_count AS pulseCount,-->
+				<!--pretreatment_evaluation AS pretreatmentEvaluation,-->
+				<!--treatment_count AS treatmentCount,-->
+				<!--patient_number-->
+		 <!--FROM rtms-->
+		 <!--WHERE patient_number = #{patientNumber} LIMIT 1) r ON b.id = r.patient_number LEFT JOIN-->
+		<!--(SELECT-->
+		  <!--eeg_record AS eegRecord,-->
+		  <!--eeg_detail AS eegDetail,-->
+		  <!--eeg_type AS eegType,-->
+		  <!--have_sleep AS haveSleep,-->
+		  <!--apply_doctor AS applyDoctor,-->
+		  <!--DATE_FORMAT(gather_date, '%Y-%m-%d') AS gatherDate,-->
+		  <!--is_threshold AS isThreshold,-->
+		  <!--threshold,-->
+		  <!--stimulus_intensity AS stimulusIntensity,-->
+		  <!--patient_number-->
+		<!--FROM tms_eeg-->
+		 <!--WHERE patient_number = #{patientNumber} LIMIT 1) t ON b.id = t.patient_number-->
+		<!--WHERE b.id = #{patientNumber}-->
+	<!--</select>-->
+
+	<select id="getDetailByPatientNumber" resultType="PatientDetail">
+		SELECT
+				b.id,
+				b.patient_number AS patientNumber,
+		   	b.patient_name AS patientName,
+		   	b.patient_gender AS patientGender,
+		   	b.birthday,
+		   	b.education,
+		   	b.phone,
+		   	b.from,
+		   	b.bed_number AS bedNumber,
+				dt.disease_type AS diseaseType,
+		   	b.diagnose,
+				b.out_diagnose AS outDiagnose,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate,
+				b.hospital_number AS hospitalNumber,
+				b.dimensions
+		FROM patient_record b LEFT JOIN disease_type dt ON b.disease_type= dt.id
+		WHERE b.id = #{patientNumber}
+	</select>
+
+	<select id="getCountByDate" resultType="int">
+		SELECT COUNT(0) AS cnt
+		FROM patient_record
+		WHERE DATE_FORMAT(create_date, '%Y-%m-%d') <![CDATA[<]]> #{startDate}
+	</select>
+
+	<select id="getPatientChartsData" resultType="Map">
+		SELECT COUNT(0) AS cnt,
+			DATE_FORMAT(create_date, '%Y-%m-%d') AS time
+		FROM patient_record
+		WHERE DATE_FORMAT(create_date, '%Y-%m-%d') BETWEEN #{startDate} AND #{endDate}
+		GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d')
+	</select>
+
+	<select id="getPatientGenderChartsData" resultType="Map">
+		SELECT COUNT(0) AS cnt,
+			patient_gender AS patientGender
+		FROM patient_record
+		GROUP BY patient_gender
+	</select>
+
+	<select id="getPatient10InfoData" resultType="Map">
+		SELECT
+				b.id,
+		   	b.patient_name AS patientName,
+		   	b.patient_gender AS patientGender,
+				dt.disease_type AS diseaseType,
+		   	b.diagnose,
+				DATE_FORMAT(b.create_date, '%Y-%m-%d') AS createDate
+		FROM patient_record b LEFT JOIN disease_type dt ON b.disease_type= dt.id
+		ORDER BY b.create_date DESC
+		LIMIT 0, 10
+	</select>
+</mapper>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>横幅管理</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <style type="text/css">
+        .table_center{
+            vertical-align: middle!important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/inspinia/js/popper.min.js}"></script>
+    <script th:src="@{/inspinia/js/bootstrap.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+    <!-- jqGrid -->
+    <script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{/inspinia/js/inspinia.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+
+    <!-- Ladda -->
+    <script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+
+    <!-- Chosen -->
+    <script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+
+    <!-- Select2 -->
+    <script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/dataTables/datatables.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/dataTables/datatables.bootstrap4.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/dataTables/datatables.reload.js}"></script>
+    <script src="../js/content/banner/index.js"></script>
+
+    <shiro:hasPermission name="banner:update">
+        <script type="text/javascript">
+            function editShow(){
+                $('.edit').css('display','' );
+            }
+        </script>
+    </shiro:hasPermission>
+
+    <shiro:hasPermission name="banner:delete">
+        <script type="text/javascript">
+            function deleteShow(){
+                $('.delete').css('display','');
+            }
+        </script>
+    </shiro:hasPermission>
+    <div id="wrapper">
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <div th:replace="navi::navi"></div>
+
+            <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <form onsubmit="return false;" role="form" style="padding: 0px">
+
+                        <div class="row">
+                            <div class="col-sm-12" >
+                                <shiro:hasPermission name="banner:create">
+                                    <button type="button" class="btn btn-outline btn-primary btn-tool btn-sm" id="btn_new">
+                                        <i class="fa fa-plus"></i> 新建
+                                    </button>
+                                </shiro:hasPermission>
+                                <shiro:hasPermission name="content:banner:verify">
+                                    <button type="button" class="btn btn-outline btn-success btn-tool btn-sm" id="btn_check_content"
+                                            data-toggle="modal" data-target="#verifyDialog">
+                                        <i class="fa fa-check"></i> 审核</button>
+                                </shiro:hasPermission>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="title">标题</label>
+                                    <input type="text" id="title" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label class="col-form-label" for="type">类型</label>
+                                <select id="type" data-placeholder="请选择一个类型" class="chosen-select" >
+                                    <option value="">全部</option>
+                                    <option value="0">主页</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-6" style="text-align: right">
+                                <label class="col-form-label">&nbsp;</label>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-outline btn-default" onclick="reload()"><i class="fa fa-search"></i> 筛选
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table id="table_list" class="table table-striped table-bordered" style="width:100%;text-align: center;"></table>
+
+                    <div class="modal inmodal fade" id="bannerImgModal" aria-hidden="true" data-backdrop="static">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span
+                                            aria-hidden="true">&times;</span><span class="sr-only">关闭</span></button>
+                                    <img id="bannerImg" width="100%"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal inmodal fade" id="verifyDialog" tabindex="-1"
+                         role="dialog" aria-hidden="true" data-backdrop="static">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body" id="verifyDetail" style="overflow-y: auto;">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-default btn-tool" type="button" id="btn_verify_cancel"
+                                            data-dismiss="modal">取消</button>
+                                    <button class="ladda-button btn btn-primary btn-tool"
+                                            type="button" data-style="zoom-in" id="btn_verify_save">审核完成</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- include foot.html -->
+            <div th:replace="foot::foot"></div>
+        </div>
+    </div>
+</body>
+</html>

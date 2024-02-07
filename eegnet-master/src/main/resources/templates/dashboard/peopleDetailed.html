@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>list</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}"
+          href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <style type="text/css">
+        .info {
+            line-height: 30px;
+        }
+        .infoBlock {
+            margin: 0 auto;
+            margin-top: 10px;
+            background-color: white;
+            border-radius: 10px;
+            position: relative;
+            top: -70px;
+            border: 0;
+            width: 100%;
+
+        }
+        .headerInfo .infoBlock{
+            margin: 0;
+        }
+        .borderBottom {
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .blockTitle {
+            line-height: 40px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #1ab394;
+            vertical-align: text-bottom;
+        }
+        .blockTitle img{
+            vertical-align: text-bottom !important;
+            margin-right: 10px;
+        }
+        #page-wrapper {
+            position: inherit;
+            margin: 0 0 0 0px;
+            min-height: 100vh;
+            padding: 0 0;
+        }
+        .wrapper-content {
+            padding: 20px;
+        }
+        .ibox-content{
+            background-color: transparent;
+        }
+        .headerInfo{
+            width: 100%;
+            background-color: #1ab394;
+            margin: 0 !important;
+            color: white;
+            padding: 20px 20px 60px;
+        }
+        .headerInfo img{
+            vertical-align: text-bottom !important;
+        }
+        #patientName{
+            font-size: 20px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+        .infoBox {
+            width: 100%;
+            margin: 0;
+        }
+        #eegBox,#rTmsBox,#tmsBox{
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Mainly scripts -->
+<script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+<script th:src="@{/inspinia/js/popper.min.js}"></script>
+<script th:src="@{/inspinia/js/bootstrap.js}"></script>
+<!--<script th:src="@{/https://cdn.bootcss.com/twitter-bootstrap/3.3.6/js/bootstrap.min.js}"></script>-->
+<script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+<!-- jqGrid -->
+<script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+<!-- Custom and plugin javascript -->
+<script th:src="@{/inspinia/js/inspinia.js}"></script>
+<script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+
+<!-- Ladda -->
+<script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+
+<!-- Chosen -->
+<script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+
+<!-- Select2 -->
+<script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.bootstrap4.min.js}"></script>
+<script th:src="@{/inspinia/js/plugins/dataTables/datatables.reload.js}"></script>
+
+<!-- Data picker -->
+<script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+<script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+<script src="../../js/dashboard/peopleDetailed.js"></script>
+
+<shiro:hasPermission name="diseaseType:update">
+    <script type="text/javascript">
+        function editShow(){
+            $('.edit').css('display','' );
+        }
+    </script>
+</shiro:hasPermission>
+
+<shiro:hasPermission name="diseaseType:delete">
+    <script type="text/javascript">
+        function deleteShow(){
+            $('.delete').css('display','');
+        }
+    </script>
+</shiro:hasPermission>
+<div id="wrapper">
+    <!-- include menus.html -->
+<!--    <div th:replace="menus::common"></div>-->
+    <div id="page-wrapper" class="gray-bg">
+        <!-- include head.html -->
+        <!--<div th:replace="head::head"></div>-->
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+            <div class="row headerInfo">
+                <div class="col-md-12">
+                    <div class="info"><img src="/img/userLogo.png" alt=""><span id="patientName"></span></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="patientGender"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="birthday"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="patientNumber"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="hospitalNumber"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="education"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="phone"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="from"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="bedNumber"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="diseaseType"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="diagnose"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="dimensions"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="outDiagnose"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info" id="createDate"></div>
+                </div>
+                <!--<div class="col-md-12">-->
+                <!--<div class="borderBottom"></div>-->
+                <!--</div>-->
+            </div>
+            <div class="ibox-content m-b-sm border-bottom">
+
+                <div class="row infoBlock">
+                    <div class="col-md-12 blockTitle"><img src="/img/textImg.png" alt="">EEG记录</div>
+                    <div id="eegBox">
+                        <div class="infoBox row">
+                            <div class="col-md-4">
+                                <div class="info" id="eegRecord"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="eegType"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="gatherDate"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="eegDetail"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="haveSleep"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="applyDoctor"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--<div class="col-md-12">-->
+                        <!--<div class="borderBottom"></div>-->
+                    <!--</div>-->
+                </div>
+                <div class="row infoBlock">
+                    <div class="col-md-12 blockTitle"><img src="/img/textImg.png" alt="">rTms治疗记录</div>
+                    <div id="rTmsBox">
+                        <div class="infoBox row">
+                            <div class="col-md-4">
+                                <div class="info" id="restingMotionThreshold"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="stimulusSite"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="stimulusIntensity"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="stimulusFrequency"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="stimulationTimeSeries"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="serialIntervalTime"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="totalTime"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="pulseCount"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="pretreatmentEvaluation"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="treatmentCount"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="treatmentDate"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="col-md-12">-->
+                        <!--<div class="borderBottom"></div>-->
+                    <!--</div>-->
+                </div>
+                <div class="row infoBlock">
+                    <div class="col-md-12 blockTitle"><img src="/img/textImg.png" alt="">TMS-EEG记录</div>
+                    <div id="tmsBox">
+                        <div class="infoBox row">
+                            <div class="col-md-4">
+                                <div class="info" id="eegRecord_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="eegDetail_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="eegType_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="haveSleep_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="applyDoctor_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="gatherDate_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="isThreshold_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="threshold_t"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info" id="stimulusIntensity_t"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="col-md-12">-->
+                        <!--<div class="borderBottom"></div>-->
+                    <!--</div>-->
+                </div>
+                <div class="row infoBlock" id="scaleContent">
+                    <div class="col-md-12 blockTitle"><img src="/img/textImg.png" alt="">量表数据</div>
+                </div>
+            </div>
+        </div>
+        <!-- include foot.html -->
+<!--        <div th:replace="foot::foot"></div>-->
+    </div>
+</div>
+</body>
+</html>

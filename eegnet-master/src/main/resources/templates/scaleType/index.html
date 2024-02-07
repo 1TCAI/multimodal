@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>量表类型管理</title>
+
+    <link th:href="@{/inspinia/css/bootstrap.min.css}" href="../inspinia/css/bootstrap.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/font-awesome/css/font-awesome.css}" href="../inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link th:href="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.css}" href="../inspinia/js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/jqGrid/ui.jqgrid.css}" href="../inspinia/css/plugins/jqGrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/sweetalert/sweetalert.css}" href="../inspinia/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/dataTables/datatables.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/switchery/switchery.css}" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/chosen/bootstrap-chosen.css}" href="../inspinia/css/plugins/chosen/bootstrap-chosen.css"  rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/plugins/select2/select2.min.css}" href="../inspinia/css/plugins/select2/select2.min.css" rel="stylesheet">
+
+    <link th:href="@{/inspinia/css/animate.css}" href="../inspinia/css/animate.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/style.css}" href="../inspinia/css/style.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/ladda/ladda-themeless.min.css}" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/datapicker/datepicker3.css}"
+          href="../inspinia/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link th:href="@{/css/common.css}" href="../css/common.css" rel="stylesheet">
+    <link th:href="@{/inspinia/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}" href="./inspinia/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+    <style type="text/css">
+        .bootstrap-tagsinput {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            display: inline-block;
+            padding: 4px 6px;
+            color: #555;
+            vertical-align: middle;
+            border-radius: 4px;
+            min-width: 212px;
+            min-height: 100px;
+            max-width: 100%;
+            line-height: 22px;
+            cursor: text;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Mainly scripts -->
+    <script th:src="@{/inspinia/js/jquery-3.1.1.min.js}"></script>
+    <script th:src="@{/inspinia/js/popper.min.js}"></script>
+    <script th:src="@{/inspinia/js/bootstrap.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+
+    <!-- jqGrid -->
+    <script th:src="@{/inspinia/js/plugins/jqGrid/i18n/grid.locale-cn.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/jqGrid/jquery.jqGrid.min.js}"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script th:src="@{/inspinia/js/inspinia.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/pace/pace.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/jquery-ui/jquery-ui.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/sweetalert/sweetalert.min.js}"></script>
+
+    <!-- Ladda -->
+    <script th:src="@{/inspinia/js/plugins/ladda/spin.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/ladda/ladda.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/ladda/ladda.jquery.min.js}"></script>
+
+    <!-- Chosen -->
+    <script th:src="@{/inspinia/js/plugins/chosen/chosen.jquery.js}"></script>
+
+    <!-- Switchery -->
+    <script th:src="@{/inspinia/js/plugins/switchery/switchery.js}" ></script>
+
+    <!-- Select2 -->
+    <script th:src="@{/inspinia/js/plugins/select2/select2.full.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/dataTables/datatables.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/dataTables/datatables.bootstrap4.min.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/dataTables/datatables.reload.js}"></script>
+
+    <!-- Data picker -->
+    <script th:src="@{/inspinia/js/plugins/datapicker/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js}"></script>
+    <script th:src="@{/inspinia/js/plugins/validate/jquery.validate.min.js}"></script>
+    <script th:src="@{/js/jquery.validate.js}"></script>
+    <script th:src="@{/js/scaleType/update.js}"></script>
+    <script src="../js/scaleType/index.js"></script>
+
+    <shiro:hasPermission name="scaleType:update">
+        <script type="text/javascript">
+            function editShow(){
+                $('.edit').css('display','' );
+            }
+            function abledShow() {
+                $('.abledShow').css('display', '');
+            }
+        </script>
+    </shiro:hasPermission>
+
+    <script th:if="${isAdmin == 1}" type="text/javascript">
+        function deleteShow(){
+            $('.delete').css('display','');
+        }
+    </script>
+    <div id="wrapper">
+
+        <!-- include menus.html -->
+<!--        <div th:replace="menus::common"></div>-->
+
+        <div id="page-wrapper" class="gray-bg">
+
+            <!-- include head.html -->
+<!--            <div th:replace="head::head"></div>-->
+            <div th:replace="navi::navi"></div>
+            <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <form onsubmit="return false;" role="form" style="padding: 0px">
+
+                        <div class="row">
+                            <div class="col-sm-12" >
+<!--                                <button type="button" class="btn btn-outline btn-primary btn-tool btn-sm" id="btn_search" onclick="reload()">-->
+<!--                                    <i class="fa fa-search"></i> 筛选-->
+<!--                                </button>-->
+                                <shiro:hasPermission name="scaleType:create">
+                                    <button type="button" class="btn btn-outline btn-primary btn-tool btn-sm" id="btn_new">
+                                        <i class="fa fa-plus"></i> 添加
+                                    </button>
+                                </shiro:hasPermission>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="scaleType_s">量表类型</label>
+                                    <input type="text" id="scaleType_s" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-1" style="text-align: left">
+                                <label class="col-form-label">&nbsp;</label>
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-outline btn-default" onclick="reload()"><i class="fa fa-search"></i> 筛选
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table id="table_list" class="table table-striped table-bordered" style="width:100%;text-align: center;"></table>
+
+                </div>
+
+            </div>
+            <!-- include foot.html -->
+<!--            <div th:replace="foot::foot"></div>-->
+        </div>
+    </div>
+    <div class="modal inmodal fade" id="myModal" tabindex="-1" role="dialog" data-backdrop="static" aria-hidden="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content animated fadeIn">
+                <div class="modal-header">
+                    <h4 class="modal-title">添加EEG记录</h4>
+                </div>
+                <div class="modal-body">
+                    <div th:replace="scaleType/dialog_update::scaleType_dialog"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
